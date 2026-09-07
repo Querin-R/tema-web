@@ -217,6 +217,14 @@ add_action( 'save_post_post', 'ren_save_post_hero_meta' );
 function ren_post_hero_body_class( $classes ) {
 	if ( is_singular( 'post' ) && get_post_meta( get_the_ID(), 'ren_hero_enabled', true ) ) {
 		$classes[] = 'ren-hero';
+
+		$post_id = get_the_ID();
+		$bg_type = get_post_meta( $post_id, 'ren_hero_bg_type', true );
+		$has_img = (int) get_post_meta( $post_id, 'ren_hero_bg_image', true );
+
+		if ( 'image' === $bg_type && $has_img ) {
+			$classes[] = 'ren-hero-image';
+		}
 	}
 	return $classes;
 }
