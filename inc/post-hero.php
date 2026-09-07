@@ -243,16 +243,21 @@ function ren_post_hero_inline_style() {
 		return;
 	}
 
-	$post_id  = get_the_ID();
-	$bg_type  = get_post_meta( $post_id, 'ren_hero_bg_type', true );
-	$bg_type  = 'image' === $bg_type ? 'image' : 'color';
-	$bg_value = '';
+	$post_id      = get_the_ID();
+	$bg_type      = get_post_meta( $post_id, 'ren_hero_bg_type', true );
+	$bg_type      = 'image' === $bg_type ? 'image' : 'color';
+	$bg_value     = '';
+	$bg_value_sm  = ''; // Mobile override; only set for the image case.
 
 	if ( 'image' === $bg_type ) {
-		$image_id  = (int) get_post_meta( $post_id, 'ren_hero_bg_image', true );
-		$image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
+		$image_id     = (int) get_post_meta( $post_id, 'ren_hero_bg_image', true );
+		$image_url    = $image_id ? wp_get_attachment_image_url( $image_id, 'ren-hero-bg' ) : '';
+		$image_url_sm = $image_id ? wp_get_attachment_image_url( $image_id, 'ren-hero-bg-mobile' ) : '';
 		if ( $image_url ) {
 			$bg_value = 'url(' . esc_url( $image_url ) . ') center / cover no-repeat';
+		}
+		if ( $image_url_sm ) {
+			$bg_value_sm = 'url(' . esc_url( $image_url_sm ) . ') center / cover no-repeat';
 		}
 	} else {
 		$gradient = get_post_meta( $post_id, 'ren_hero_bg_gradient', true );
@@ -268,7 +273,14 @@ function ren_post_hero_inline_style() {
 		$bg_value = 'var(--wp--custom--color--post-hero)';
 	}
 
-	echo '<style>body.ren-hero{--ren-hero-bg:' . esc_html( $bg_value ) . ';}</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_value is a sanitized hex color, a CSS gradient() the author typed themselves in wp-admin, or an escaped URL; none of it is user-submitted on the front end.
+	echo '<style>body.ren-hero{--ren-hero-bg:' . esc_html( $bg_value ) . ';}';
+	// Mobile phones get the much lighter 900x900 crop instead of the
+	// 2400x1200 desktop one — only relevant when the hero background is
+	// an image (color/gradient hero values don't need a mobile variant).
+	if ( $bg_value_sm ) {
+		echo '@media (max-width: 781px){body.ren-hero{--ren-hero-bg:' . esc_html( $bg_value_sm ) . ';}}';
+	}
+	echo '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_value/$bg_value_sm are a sanitized hex color, a CSS gradient() the author typed themselves in wp-admin, or an escaped URL; none of it is user-submitted on the front end.
 }
 add_action( 'wp_head', 'ren_post_hero_inline_style' );
 
