@@ -1,0 +1,35 @@
+<!-- wp:group {"className":"ren-more-articles-band"} -->
+<div class="wp-block-group ren-more-articles-band">
+
+	<!-- wp:group {"className":"ren-more-articles-section","style":{"spacing":{"blockGap":"1.5rem"}}} -->
+	<div class="wp-block-group ren-more-articles-section">
+
+		<!-- wp:heading {"level":3,"fontSize":"medium","style":{"typography":{"textTransform":"uppercase","letterSpacing":"0.08em"}},"textColor":"muted"} -->
+		<h3 class="wp-block-heading has-muted-color has-text-color has-medium-font-size" style="letter-spacing:0.08em;text-transform:uppercase">Altri articoli</h3>
+		<!-- /wp:heading -->
+
+		<!-- wp:query {"queryId":1,"query":{"perPage":4,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"className":"ren-more-articles"} -->
+		<div class="wp-block-query ren-more-articles">
+			<!-- wp:post-template {"layout":{"type":"grid","columnCount":4}} -->
+
+				<!-- wp:post-featured-image {"isLink":true,"style":{"border":{"radius":"6px"}},"aspectRatio":"4/3"} /-->
+
+				<!-- wp:post-title {"level":4,"isLink":true,"fontSize":"medium","style":{"spacing":{"margin":{"top":"0.75rem","bottom":"0.25rem"}}}} /-->
+
+				<!-- wp:post-date {"fontSize":"small","textColor":"muted"} /-->
+
+			<!-- /wp:post-template -->
+
+			<!-- wp:query-no-results -->
+				<!-- wp:paragraph {"textColor":"muted"} -->
+				<p class="has-muted-color has-text-color">Nessun altro articolo disponibile.</p>
+				<!-- /wp:paragraph -->
+			<!-- /wp:query-no-results -->
+		</div>
+		<!-- /wp:query -->
+
+	</div>
+	<!-- /wp:group -->
+
+</div>
+<!-- /wp:group -->

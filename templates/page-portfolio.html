@@ -1,0 +1,43 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","className":"ren-header"} /-->
+
+<!-- wp:group {"tagName":"main","style":{"spacing":{"padding":{"top":"3.5rem","bottom":"var:custom|spacing|section-gap","left":"1.5rem","right":"1.5rem"}}},"layout":{"type":"constrained","contentSize":"1280px"}} -->
+<main class="wp-block-group" style="padding-top:3.5rem;padding-right:1.5rem;padding-bottom:var(--wp--custom--spacing--section-gap);padding-left:1.5rem">
+
+	<!-- wp:post-title {"level":1,"fontSize":"xx-large","style":{"spacing":{"margin":{"bottom":"0.5rem"}}}} /-->
+
+	<!-- wp:post-content {"style":{"spacing":{"margin":{"bottom":"3rem"}}}} /-->
+
+	<!-- wp:pattern {"slug":"ren/portfolio-filter-bar"} /-->
+
+	<!-- wp:query {"queryId":5,"query":{"perPage":12,"postType":"portfolio","orderBy":"menu_order","order":"asc","inherit":false}} -->
+	<div class="wp-block-query">
+		<!-- wp:post-template {"className":"ren-grid"} -->
+			<!-- wp:group {"tagName":"article","className":"ren-project-card","layout":{"type":"constrained"}} -->
+			<article class="wp-block-group ren-project-card">
+				<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"4/5","style":{"border":{"radius":"6px"}}} /-->
+				<!-- wp:group {"style":{"spacing":{"margin":{"top":"1rem"}}}} -->
+				<div class="wp-block-group" style="margin-top:1rem">
+					<!-- wp:post-terms {"term":"portfolio_category","fontSize":"small","textColor":"accent"} /-->
+					<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"medium","style":{"spacing":{"margin":{"top":"0.4rem"}}}} /-->
+				</div>
+				<!-- /wp:group -->
+			</article>
+			<!-- /wp:group -->
+		<!-- /wp:post-template -->
+
+		<!-- wp:query-pagination {"style":{"spacing":{"margin":{"top":"3rem"}}}} -->
+		<!-- wp:query-pagination-previous /-->
+		<!-- wp:query-pagination-numbers /-->
+		<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+	</div>
+	<!-- /wp:query -->
+
+	<!-- wp:paragraph {"className":"ren-empty"} -->
+	<p class="ren-empty">No projects match your filters — try a different category or search term.</p>
+	<!-- /wp:paragraph -->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

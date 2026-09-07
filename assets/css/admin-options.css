@@ -1,0 +1,181 @@
+/**
+ * Admin-only styles for the Theme Options page (Appearance -> Theme Options).
+ * Loaded only on that screen — see ren_admin_assets() in inc/theme-options.php.
+ * Kept out of style.css because that file only loads on the front end.
+ */
+
+/* Theme Options admin panel */
+.ren-font-mode-panel {
+	padding: 0.75rem 1rem;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	max-width: 480px;
+}
+.ren-font-file-row {
+	margin-top: 0.75rem;
+}
+.ren-clearable-color {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* ── Theme Options page: sidebar + card layout ───────────────────── */
+.ren-options-wrap {
+	max-width: 1100px;
+}
+
+.ren-options-title {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin: 1rem 0 1.5rem;
+}
+
+.ren-options-logo {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 6px;
+	background: #0a0a0a;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+}
+
+.ren-options-version {
+	margin-left: auto;
+	font-size: 12px;
+	font-weight: 400;
+	color: #8a8a8a;
+	background: #f0f0f1;
+	padding: 2px 10px;
+	border-radius: 999px;
+}
+
+.ren-options-shell {
+	display: flex;
+	align-items: flex-start;
+	gap: 0;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.ren-options-sidebar {
+	flex: 0 0 220px;
+	border-right: 1px solid #dcdcde;
+	padding: 0.75rem 0;
+	align-self: stretch;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 480px;
+}
+
+.ren-options-sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ren-nav-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 20px;
+	text-decoration: none;
+	color: #1d2327;
+	font-weight: 500;
+	border-left: 3px solid transparent;
+}
+
+.ren-nav-item:hover {
+	background: #f6f7f7;
+}
+
+.ren-nav-item.is-active {
+	background: #f0f6fc;
+	border-left-color: #b026ff;
+	color: #b026ff;
+}
+
+.ren-nav-item .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+}
+
+.ren-reset-link {
+	display: block;
+	padding: 10px 20px;
+	color: #b32d2e;
+	text-decoration: none;
+	font-size: 13px;
+	border-top: 1px solid #dcdcde;
+	margin-top: 0.75rem;
+}
+
+.ren-reset-link:hover {
+	color: #b32d2e;
+	text-decoration: underline;
+}
+
+.ren-options-content {
+	flex: 1;
+	padding: 1.75rem 2rem;
+	min-width: 0;
+}
+
+.ren-options-content h2 {
+	margin-top: 0;
+}
+
+.ren-tab-panel {
+	display: none;
+}
+
+.ren-theme-info-box {
+	margin-top: 2rem;
+	padding: 1rem 1.25rem;
+	background: #f0f6fc;
+	border: 1px solid #c5d9ed;
+	border-radius: 6px;
+	font-size: 13px;
+	color: #3c434a;
+}
+
+.ren-theme-info-box p {
+	margin: 0.25rem 0;
+}
+
+.ren-save-button.button-primary {
+	background: #b026ff;
+	border-color: #9a1de0;
+	box-shadow: none;
+	margin-top: 1.5rem;
+}
+
+.ren-save-button.button-primary:hover,
+.ren-save-button.button-primary:focus {
+	background: #9a1de0;
+	border-color: #9a1de0;
+}
+
+@media (max-width: 782px) {
+	.ren-options-shell {
+		flex-direction: column;
+	}
+	.ren-options-sidebar {
+		flex: none;
+		width: 100%;
+		border-right: none;
+		border-bottom: 1px solid #dcdcde;
+		min-height: auto;
+	}
+}

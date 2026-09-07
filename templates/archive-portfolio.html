@@ -1,0 +1,61 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","className":"ren-header"} /-->
+
+<!-- wp:group {"tagName":"main","style":{"spacing":{"padding":{"top":"3.5rem","bottom":"var:custom|spacing|section-gap","left":"1.5rem","right":"1.5rem"}}},"layout":{"type":"constrained","contentSize":"1280px"}} -->
+<main class="wp-block-group" style="padding-top:3.5rem;padding-right:1.5rem;padding-bottom:var(--wp--custom--spacing--section-gap);padding-left:1.5rem">
+
+	<!-- wp:group {"align":"full","tagName":"section","className":"ren-archive-header","style":{"spacing":{"padding":{"top":"2.5rem","bottom":"2.5rem","left":"1.5rem","right":"1.5rem"},"margin":{"bottom":"2.5rem"}}},"layout":{"type":"constrained","contentSize":"1280px"}} -->
+	<section class="wp-block-group alignfull ren-archive-header" style="margin-bottom:2.5rem;padding-top:2.5rem;padding-right:1.5rem;padding-bottom:2.5rem;padding-left:1.5rem">
+		<!-- wp:heading {"fontSize":"xx-large","style":{"spacing":{"margin":{"bottom":"0.5rem"}}}} -->
+		<h1 class="wp-block-heading has-xx-large-font-size" style="margin-bottom:0.5rem">Selected Work</h1>
+		<!-- /wp:heading -->
+
+		<!-- wp:paragraph {"textColor":"muted","fontSize":"large"} -->
+		<p class="has-muted-color has-text-color has-large-font-size">Design and photography projects, filterable by category.</p>
+		<!-- /wp:paragraph -->
+	</section>
+	<!-- /wp:group -->
+
+	<!-- wp:pattern {"slug":"ren/portfolio-filter-bar"} /-->
+
+	<!-- wp:query {"queryId":3,"query":{"perPage":12,"postType":"portfolio","orderBy":"menu_order","order":"asc","inherit":false},"layout":{"type":"default"}} -->
+	<div class="wp-block-query">
+
+		<!-- wp:post-template {"className":"ren-grid"} -->
+
+			<!-- wp:group {"tagName":"article","className":"ren-project-card","layout":{"type":"constrained"}} -->
+			<article class="wp-block-group ren-project-card">
+				<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"4/5","style":{"border":{"radius":"6px"}}} /-->
+				<!-- wp:group {"style":{"spacing":{"margin":{"top":"1rem"}}}} -->
+				<div class="wp-block-group" style="margin-top:1rem">
+					<!-- wp:post-terms {"term":"portfolio_category","fontSize":"small","textColor":"accent","style":{"typography":{"textTransform":"uppercase","letterSpacing":"0.06em"}}} /-->
+					<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"medium","style":{"spacing":{"margin":{"top":"0.4rem"}}}} /-->
+				</div>
+				<!-- /wp:group -->
+			</article>
+			<!-- /wp:group -->
+
+		<!-- /wp:post-template -->
+
+		<!-- wp:query-no-results -->
+			<!-- wp:paragraph {"textColor":"muted"} -->
+			<p class="has-muted-color has-text-color">No projects published yet — add some from the Portfolio menu in wp-admin.</p>
+			<!-- /wp:paragraph -->
+		<!-- /wp:query-no-results -->
+
+		<!-- wp:query-pagination {"style":{"spacing":{"margin":{"top":"3rem"}}}} -->
+		<!-- wp:query-pagination-previous /-->
+		<!-- wp:query-pagination-numbers /-->
+		<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+
+	</div>
+	<!-- /wp:query -->
+
+	<!-- wp:paragraph {"className":"ren-empty"} -->
+	<p class="ren-empty">No projects match your filters — try a different category or search term.</p>
+	<!-- /wp:paragraph -->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

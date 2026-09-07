@@ -1,0 +1,958 @@
+/*
+Theme Name: Ren Studio
+Theme URI: https://example.com/ren
+Author: René Querin
+Author URI: https://q-design.it
+Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
+Version: 2.23.0
+Requires at least: 6.4
+Tested up to: 6.6
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: ren
+Tags: block-theme, full-site-editing, portfolio, blog, minimal, one-column, custom-colors, custom-menu, editor-style
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+/* Fallback / editor-only tweaks. Almost everything else lives in theme.json.
+   This file intentionally stays thin — theme.json + block styles do the work. */
+
+.ren-skip-link {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 999999;
+	padding: 1em 1.5em;
+	background: var(--wp--preset--color--accent, #b026ff);
+	color: var(--wp--preset--color--background, #0a0a0a);
+	font-weight: 700;
+}
+
+.ren-skip-link:focus {
+	left: 1em;
+	top: 1em;
+}
+
+/* Article meta row: date · author · reading time, all in muted small text. */
+.ren-article-meta,
+.ren-article-meta p,
+.ren-article-meta .wp-block-shortcode {
+	color: var(--wp--preset--color--muted);
+	font-size: var(--wp--preset--font-size--small);
+}
+
+.ren-article-meta {
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* Optimized reading typography for the single post body. */
+.ren-article-body {
+	font-size: 1.1875rem;
+	line-height: 1.75;
+}
+
+.ren-article-body > * + * {
+	margin-top: 1.5em;
+}
+
+.ren-article-body h2,
+.ren-article-body h3 {
+	margin-top: 2.5em;
+}
+
+.ren-article-body img {
+	border-radius: 6px;
+}
+
+.ren-article-body blockquote {
+	border-left: 3px solid var(--wp--preset--color--accent);
+	padding-left: 1.5rem;
+	font-style: italic;
+	color: var(--wp--preset--color--foreground);
+}
+
+/* Alternate the image/text side on every other "Recent Work" row. */
+.ren-alt .wp-block-post-template > li:nth-child(even) .ren-alt-row {
+	flex-direction: row-reverse;
+}
+
+/* Portfolio grid cards. */
+.ren-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 2rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ren-project-card {
+	position: relative;
+}
+
+.ren-project-card figure img {
+	border-radius: 6px;
+	transition: transform 0.4s ease;
+}
+
+.ren-project-card:hover figure img {
+	transform: scale(1.02);
+}
+
+.ren-empty {
+	display: none;
+	color: var(--wp--preset--color--muted);
+	padding: 3rem 0;
+	text-align: center;
+}
+
+@media (max-width: 900px) {
+	.ren-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 600px) {
+	.ren-grid {
+		grid-template-columns: 1fr;
+	}
+	.ren-alt-row,
+	.ren-alt .wp-block-post-template > li:nth-child(even) .ren-alt-row {
+		flex-direction: column !important;
+	}
+}
+
+/* Project spec sheet on single-portfolio. */
+.ren-project-specs dt {
+	color: var(--wp--preset--color--muted);
+	font-size: var(--wp--preset--font-size--small);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+.ren-project-specs dd {
+	margin: 0 0 1.25rem;
+	font-size: var(--wp--preset--font-size--medium);
+}
+
+/* [ren_social_links] */
+.ren-social-links {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.ren-social-links a {
+	display: inline-flex;
+	color: var(--wp--preset--color--foreground);
+	opacity: 0.75;
+	transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.ren-social-links a:hover {
+	opacity: 1;
+	color: var(--wp--preset--color--accent);
+}
+
+/* [ren_hover] — image + overlay on hover */
+.ren-hover {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	border-radius: 6px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.ren-hover img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.ren-hover__overlay {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	padding: 1.5rem;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	background: linear-gradient(180deg, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 0.85) 100%);
+}
+
+.ren-hover__title {
+	display: block;
+	font-family: var(--wp--preset--font-family--display);
+	font-size: var(--wp--preset--font-size--large);
+	color: var(--wp--preset--color--foreground);
+}
+
+.ren-hover__category {
+	display: block;
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--accent);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	margin-top: 0.25rem;
+}
+
+.ren-hover__icons {
+	margin-top: 0.75rem;
+}
+
+.ren-hover__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--background);
+}
+
+.ren-hover:hover .ren-hover__overlay,
+.ren-hover:focus-within .ren-hover__overlay {
+	opacity: 1;
+}
+
+.ren-hover--zoom img {
+	transition: transform 0.5s ease;
+}
+.ren-hover--zoom:hover img {
+	transform: scale(1.06);
+}
+
+.ren-hover--accent .ren-hover__overlay {
+	background: linear-gradient(180deg, rgba(176, 38, 255, 0) 30%, rgba(176, 38, 255, 0.55) 100%);
+}
+
+.ren-hover--gradient .ren-hover__overlay {
+	background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 0.9) 100%);
+	opacity: 1;
+}
+
+.ren-hover--blur .ren-hover__overlay {
+	backdrop-filter: blur(0px);
+	transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
+}
+.ren-hover--blur:hover .ren-hover__overlay {
+	backdrop-filter: blur(2px);
+}
+
+.ren-hover--slide .ren-hover__overlay {
+	transform: translateY(100%);
+	opacity: 1;
+	transition: transform 0.35s ease;
+}
+.ren-hover--slide:hover .ren-hover__overlay {
+	transform: translateY(0);
+}
+
+.ren-hover--border {
+	box-shadow: inset 0 0 0 0 var(--wp--preset--color--accent);
+	transition: box-shadow 0.3s ease;
+}
+.ren-hover--border:hover {
+	box-shadow: inset 0 0 0 3px var(--wp--preset--color--accent);
+}
+
+/* [ren_counter] */
+.ren-counter {
+	display: inline-block;
+	font-family: var(--wp--preset--font-family--display);
+	font-size: var(--wp--preset--font-size--xx-large);
+	font-weight: 600;
+	color: var(--wp--preset--color--foreground);
+	font-variant-numeric: tabular-nums;
+}
+
+/* [ren_separator] */
+.ren-separator {
+	width: 100%;
+	line-height: 0;
+}
+.ren-separator svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+.ren-separator--top svg {
+	transform: rotate(180deg);
+}
+
+/* Skills & Experience page pattern */
+.ren-skill {
+	margin-bottom: 1.5rem;
+}
+
+.ren-skill__label {
+	display: flex;
+	justify-content: space-between;
+	font-size: var(--wp--preset--font-size--small);
+	margin-bottom: 0.5rem;
+}
+
+.ren-skill__percent {
+	color: var(--wp--preset--color--muted);
+}
+
+.ren-skill__bar {
+	width: 100%;
+	height: 6px;
+	border-radius: 999px;
+	background: var(--wp--preset--color--surface);
+	overflow: hidden;
+}
+
+.ren-skill__fill {
+	height: 100%;
+	width: 0%;
+	border-radius: 999px;
+	background: var(--wp--preset--color--accent);
+	transition: width 1.1s ease;
+}
+
+.ren-timeline-item {
+	padding-bottom: 1rem;
+	border-bottom: 1px solid var(--wp--preset--color--border);
+}
+
+/* ── .ren-table — generic responsive table, colors from Theme Options ──
+   Add the "ren-table" class to any table (including the core Table block's
+   "Additional CSS class(es)" field in Advanced settings). Below 680px, rows
+   stack into cards using the data-label attribute — injected automatically
+   by assets/js/responsive-tables.js, no manual markup needed. No borders —
+   rows are separated purely by the zebra-stripe colors. */
+.ren-table,
+.wp-block-table.ren-table table {
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+	border-radius: 8px;
+}
+
+.wp-block-table.ren-table {
+	overflow-x: auto;
+}
+
+.ren-table thead th,
+.wp-block-table.ren-table table thead th {
+	background: var(--wp--custom--color--table-header-bg);
+	color: var(--wp--custom--color--table-header-text);
+	text-align: left;
+	padding: 0.85rem 1rem;
+	font-weight: 600;
+	font-size: var(--wp--preset--font-size--small);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	border: none;
+	white-space: nowrap;
+}
+
+.ren-table tbody tr:nth-child(odd),
+.wp-block-table.ren-table table tbody tr:nth-child(odd) {
+	background: var(--wp--custom--color--table-row-1);
+}
+
+.ren-table tbody tr:nth-child(even),
+.wp-block-table.ren-table table tbody tr:nth-child(even) {
+	background: var(--wp--custom--color--table-row-2);
+}
+
+.ren-table td,
+.ren-table th,
+.wp-block-table.ren-table table td,
+.wp-block-table.ren-table table th {
+	padding: 0.7rem 1rem;
+	vertical-align: middle;
+	border: none;
+	word-break: break-word;
+}
+
+/* Responsive: stacked cards below 680px, same technique as the RNA plugins. */
+@media (max-width: 680px) {
+	.wp-block-table.ren-table {
+		overflow-x: hidden;
+	}
+
+	.ren-table thead,
+	.wp-block-table.ren-table table thead {
+		display: none;
+	}
+
+	.ren-table, .ren-table tbody, .ren-table tr, .ren-table td,
+	.wp-block-table.ren-table table,
+	.wp-block-table.ren-table table tbody,
+	.wp-block-table.ren-table table tr,
+	.wp-block-table.ren-table table td {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.ren-table tr,
+	.wp-block-table.ren-table table tr {
+		padding: 0.85rem 1rem;
+	}
+
+	.ren-table td,
+	.wp-block-table.ren-table table td {
+		padding: 0.3rem 0;
+		text-align: left;
+		background: transparent;
+		overflow-wrap: anywhere;
+	}
+
+	.ren-table td::before,
+	.wp-block-table.ren-table table td::before {
+		content: attr(data-label) ": ";
+		display: block;
+		font-weight: 600;
+		font-size: var(--wp--preset--font-size--small);
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		color: var(--wp--preset--color--muted);
+		margin-bottom: 0.15rem;
+	}
+}
+
+/* Blog archive layout: List (image beside text) — see Theme Options → Blog. */
+body.ren-blog-layout-list .wp-block-post-template {
+	grid-template-columns: 1fr !important;
+	gap: 1.5rem !important;
+}
+
+body.ren-blog-layout-list .ren-blog-card {
+	display: flex !important;
+	flex-direction: row;
+	align-items: stretch;
+}
+
+body.ren-blog-layout-list .ren-blog-card > figure.wp-block-post-featured-image {
+	flex: 0 0 280px;
+	margin: 0;
+}
+
+body.ren-blog-layout-list .ren-blog-card > figure.wp-block-post-featured-image img {
+	height: 100%;
+	object-fit: cover;
+}
+
+body.ren-blog-layout-list .ren-blog-card > .wp-block-group {
+	flex: 1;
+	min-width: 0;
+}
+
+@media (max-width: 700px) {
+	body.ren-blog-layout-list .ren-blog-card {
+		flex-direction: column;
+	}
+	body.ren-blog-layout-list .ren-blog-card > figure.wp-block-post-featured-image {
+		flex-basis: auto;
+	}
+}
+
+/* Services (detailed) page pattern */
+.ren-service-row {
+	transition: padding-left 0.25s ease;
+}
+
+.ren-service-row:hover {
+	padding-left: 0.5rem;
+}
+
+/* "Latest News" homepage pattern (stacked list, large image on top) */
+.ren-news-item figure img {
+	transition: transform 0.4s ease;
+}
+
+.ren-news-item:hover figure img {
+	transform: scale(1.015);
+}
+
+.ren-news-item {
+	border-bottom: 1px solid var(--wp--preset--color--border);
+	padding-bottom: var(--wp--custom--spacing--section-gap);
+}
+
+.ren-news-item:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+/* Single post title + meta row alignment — see Theme Options → Blog → Post Title Alignment. */
+.ren-post-header {
+	text-align: var(--ren-post-title-align, left);
+}
+
+.ren-post-header .ren-article-meta {
+	justify-content: var(--ren-post-meta-justify, flex-start) !important;
+}
+
+/* Per-post override (Title Alignment meta box) — wins over the site-wide
+   Theme Options setting above. */
+body.ren-post-align-left .ren-post-header {
+	text-align: left !important;
+}
+body.ren-post-align-left .ren-post-header .ren-article-meta {
+	justify-content: flex-start !important;
+}
+body.ren-post-align-center .ren-post-header {
+	text-align: center !important;
+}
+body.ren-post-align-center .ren-post-header .ren-article-meta {
+	justify-content: center !important;
+}
+body.ren-post-align-right .ren-post-header {
+	text-align: right !important;
+}
+body.ren-post-align-right .ren-post-header .ren-article-meta {
+	justify-content: flex-end !important;
+}
+
+/* "Altri articoli" 4-up grid at the end of a post (parts/post-more-
+   articles.html) — replaces the old prev/next links plus the Categories +
+   Recent Posts band. Query Loop's own grid layout sets grid-template-
+   columns already; this just adds spacing and keeps title/date rhythm
+   consistent with the rest of the theme's type scale. */
+/* "Altri articoli" band at the end of a post (parts/post-more-articles.html)
+   — replaces the old prev/next links plus the Categories + Recent Posts
+   band. Two nested wrappers, same pattern as the hero band: the OUTER one
+   (.ren-more-articles-band) handles the true edge-to-edge viewport
+   breakout + background color + vertical padding; the INNER one
+   (.ren-more-articles-section) re-introduces a sane max-width so the
+   heading/grid don't stretch to the full 100vw. See the hero's own CSS
+   further down for why grid-column:1/-1 has to come before the
+   position:relative/left:50%/margin:-50vw viewport-breakout trick — same
+   reasoning applies here, .ren-more-articles-band sits in the same grid. */
+.ren-more-articles-band {
+	grid-column: 1 / -1;
+	position: relative;
+	left: 50%;
+	right: 50%;
+	width: 100vw;
+	margin-left: -50vw;
+	margin-right: -50vw;
+	margin-bottom: 50px;
+	background-color: var(--ren-more-articles-bg, #f0f0f0);
+	padding: 50px 0;
+}
+.ren-more-articles-section {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.5rem;
+}
+
+.ren-more-articles .is-layout-grid {
+	gap: 2rem 1.5rem;
+}
+/* The block's own aspectRatio:"4/3" setting scales the image relative to
+   its grid column — which grew a lot once this whole section became
+   full-bleed (v2.19.2), making the thumbnails look oversized. A fixed
+   height + object-fit:cover keeps every card's image the same size
+   regardless of column width, cropping instead of scaling. */
+.ren-more-articles .wp-block-post-featured-image img {
+	height: 180px;
+	object-fit: cover;
+}
+.ren-more-articles .wp-block-post-title a {
+	text-decoration: none;
+}
+.ren-more-articles .wp-block-post-title a:hover {
+	text-decoration: underline;
+}
+
+/* Previous/next navigation with thumbnails ([ren_post_nav], used on both
+   single.html and single-portfolio.html). Two plain columns (no card
+   border/background) split ~50/50, separated by a vertical divider —
+   applied as border-right on the "prev" side rather than a separate
+   divider element, since it naturally lands in the middle of a 50/50
+   flex split regardless of viewport width. The direction label sits at
+   the OUTER edge of its own column (prev: flush left: next: flush right)
+   while the thumbnail and title underneath stay left-aligned in both
+   columns — that's a deliberate asymmetry, not a bug; matches the
+   reference layout René provided rather than mirroring the whole card. */
+.ren-post-nav {
+	display: flex;
+	flex-wrap: wrap;
+}
+/* Margin has to live on .ren-post-nav-wrap (the actual grid item, a direct
+   child of .ren-content-left's grid), not on .ren-post-nav itself: a grid
+   item always establishes its own block-formatting context for its
+   contents, which blocks the normal margin-collapsing that would
+   otherwise let a child's margin-bottom bubble up and create real space
+   after the grid item as a whole. Putting it here on .ren-post-nav
+   instead just made .ren-post-nav-wrap 50px taller internally, with zero
+   visible gap before the next grid row (parts/post-nav-adjacent.html). */
+.ren-post-nav-wrap {
+	margin-bottom: 50px;
+}
+
+.ren-post-nav__item {
+	flex: 1 1 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.75rem;
+	padding: 0 2rem;
+	box-sizing: border-box;
+	text-decoration: none;
+	color: inherit;
+}
+@media (min-width: 700px) {
+	.ren-post-nav__item {
+		flex: 1 1 50%;
+		max-width: 50%;
+	}
+	.ren-post-nav__item--prev {
+		padding-left: 0;
+		border-right: 1px solid var(--wp--preset--color--border);
+	}
+	.ren-post-nav__item--next {
+		padding-right: 0;
+		/* The label ("Articolo successivo →") has its own width:100% and
+		   text-align:right below, so this doesn't move it — only the
+		   thumbnail and title (which size to their own content, so
+		   align-items actually applies to them) shift right, flush with
+		   the label above them instead of sitting flush with the divider
+		   on the left. */
+		align-items: flex-end;
+	}
+}
+.ren-post-nav__item--empty {
+	pointer-events: none;
+}
+.ren-post-nav__item--next .ren-post-nav__label {
+	text-align: right;
+}
+.ren-post-nav__item:hover .ren-post-nav__title {
+	text-decoration: underline;
+}
+
+.ren-post-nav__thumb {
+	width: 80px;
+	height: 80px;
+	border-radius: 4px;
+	overflow: hidden;
+}
+.ren-post-nav__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.ren-post-nav__label {
+	display: block;
+	width: 100%;
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--muted);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+.ren-post-nav__title {
+	font-weight: 600;
+}
+
+/* .ren-content-left is the article's reading column, built as a 3-column
+   CSS grid: 15% / 1fr / 15%. Every ordinary block sits in the middle
+   track — which the browser computes as exactly 70%, since 15%+15%=30%
+   is subtracted before 1fr gets the rest — so there's never a percentage
+   to keep in sync by hand.
+
+   Earlier versions used padding + a negative margin to "cancel" it for
+   full-bleed content, but that requires the negative margin to be
+   recalculated relative to whatever width the padding already narrowed
+   the box down to, and it silently breaks if a full-bleed element sits
+   more than one level deep in the DOM (as it does here — see the
+   display:contents note below). Grid avoids the whole problem: a
+   full-bleed item just spans grid-column 1/-1 (all three tracks), full
+   stop, regardless of nesting depth or viewport width. */
+.ren-content-left {
+	display: grid;
+	grid-template-columns: 15% 1fr 15%;
+}
+
+.ren-content-left > *,
+.ren-content-left .wp-block-post-content > * {
+	grid-column: 2;
+}
+
+/* WordPress renders the article's own blocks (paragraphs, images, the
+   Custom HTML blocks used for embedded tools, etc.) inside a
+   .wp-block-post-content wrapper div — a level deeper than
+   .ren-content-left's other direct children (title, featured image, tag
+   list...). display:contents removes that wrapper from the RENDER tree
+   so its children lay out as grid items of .ren-content-left directly
+   (instead of being trapped one level down, where the grid can't
+   place them at all). It does NOT change the DOM tree, though — so a
+   CSS selector using ">" still can't "see" them as direct children of
+   .ren-content-left; that's why the default-column rule above lists
+   ".ren-content-left .wp-block-post-content > *" as a second, explicit
+   target rather than relying on ".ren-content-left > *" alone. Skipping
+   that second selector is exactly what caused the very broken,
+   checkerboard-across-3-columns layout this comment is now next to. */
+.ren-content-left .wp-block-post-content {
+	display: contents;
+}
+
+/* Same problem, same fix, for wp:template-part blocks placed directly in
+   single.html (post-nav-adjacent, post-more-articles): a template-part
+   always renders wrapped in its own <div class="wp-block-template-part">,
+   which — exactly like .wp-block-post-content above — sits one level
+   between .ren-content-left and the .ren-full-bleed group inside the
+   part, blocking grid-column placement from reaching it. Rather than
+   unwrap every .wp-block-template-part sitewide (which would also hit
+   header/footer, breaking their own box/background/position), each call
+   site opts in individually via {"className":"ren-tp-unwrap"} on the
+   wp:template-part block — see single.html. */
+.ren-content-left .ren-tp-unwrap {
+	display: contents;
+}
+
+.ren-content-left .alignfull,
+.ren-content-left .alignwide,
+.ren-content-left .ren-full-bleed {
+	grid-column: 1 / -1 !important;
+	width: 100% !important;
+}
+
+/* Per-post "Hero" band (inc/post-hero.php): a per-post meta box toggle,
+   not a separate template — single.html is the only post template now.
+   When enabled, --ren-hero-bg is set on <body> by ren_post_hero_inline_style()
+   (a solid color, a CSS gradient() the author typed in wp-admin, or a
+   background-image url()); falls back to the site-wide Theme Options
+   "Post Hero Background" color if the post didn't set anything of its own. */
+/* Full-viewport breakout, using the classic technique: width:100vw sets
+   the box to the full viewport width outright, and left:50% +
+   margin-left:-50vw re-centers it there. This trick only computes
+   correctly when the element's "natural" position (before the shift)
+   starts flush at the left edge of a full-width ancestor — left:50% is
+   computed against the element's OWN grid/box width, not the viewport,
+   so if that starting box is already narrower/inset (like .ren-content-
+   left's grid column 2, the ~70% reading column with margins either
+   side), the trick centers around the WRONG point, landing the whole
+   band shifted right by roughly however inset that starting column was.
+   grid-column:1/-1 first is what fixes that: it makes the element's
+   pre-shift width span .ren-content-left's full grid (flush left, no
+   inset) so the viewport math that follows has the correct starting
+   point to work from. Relies on body's `overflow-x: visible !important`
+   further down this file, which is already needed for the sticky header
+   anyway — overflow-x: hidden/clip on any ancestor would clip this
+   off-screen. */
+body.ren-hero .ren-post-header {
+	grid-column: 1 / -1;
+	position: relative;
+	left: 50%;
+	right: 50%;
+	width: 100vw;
+	margin-left: -50vw;
+	margin-right: -50vw;
+	background: var(--ren-hero-bg, var(--wp--custom--color--post-hero));
+	text-align: center;
+	padding: 3.5rem 0;
+	margin-bottom: 3.5rem;
+	border-radius: 0;
+}
+body.ren-hero .ren-post-header,
+body.ren-hero .ren-post-header * {
+	color: #ffffff;
+}
+body.ren-hero .ren-post-header .ren-article-meta {
+	justify-content: center;
+}
+
+/* .ren-post-header itself is 100vw wide (see above), but its title/meta
+   text shouldn't sit flush against the literal browser edge when the
+   per-post Title Alignment is left or right — that reads as a layout bug,
+   not a design choice. This inner wrapper re-introduces a sane max-width
+   + margin, matching <main>'s own 1280px/1.5rem system, so text-align:left
+   lines the title up with roughly where the rest of the page's content
+   starts instead of the viewport's true edge. (It won't match the 15%
+   grid inset of the article body pixel-for-pixel — that inset is itself
+   relative to <main>'s width, and .ren-post-header is no longer inside
+   <main>'s box at all once it's blown out to 100vw — but this gets close
+   enough that the misalignment isn't visible without a ruler.) */
+body.ren-hero .ren-post-header__inner {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.5rem;
+}
+
+/* The featured image is kept only as source material for thumbnails
+   elsewhere (the "Altri articoli" grid, archive cards) — with the hero
+   band already showing a background image/color for this post, showing
+   the featured image again right below it would be redundant, so it's
+   hidden from the article body itself whenever hero mode is on. */
+body.ren-hero .wp-block-post-featured-image {
+	display: none;
+}
+
+/* Header: always sticky at the top. The hide-on-scroll-down effect itself
+   only activates when Theme Options → Header → Scroll Behavior is on — see
+   assets/js/header-scroll.js, which sets the transform directly (1:1 with
+   scroll position) rather than toggling a CSS-transitioned class. */
+
+/* WordPress core automatically sets `overflow-x: clip` on <body> to contain
+   alignfull blocks and prevent horizontal scrollbars — but overflow set to
+   anything other than "visible" on ANY ancestor (even just one axis) silently
+   disables position:sticky for every descendant, including this header. We
+   restore it so the header can actually stick. */
+body {
+	overflow-x: visible !important;
+}
+
+.ren-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	z-index: 100;
+	transition: box-shadow 0.35s ease;
+	will-change: transform;
+}
+
+/* Search icon button in the header nav. */
+.ren-search-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	margin-left: 0.5rem;
+	padding: 0;
+	background: transparent;
+	border: none;
+	color: currentColor;
+	cursor: pointer;
+	border-radius: 999px;
+	transition: background-color 0.15s ease;
+}
+.ren-search-toggle:hover,
+.ren-search-toggle:focus-visible {
+	background-color: var(--wp--preset--color--surface);
+}
+
+/* Fullscreen search overlay, opened by .ren-search-toggle. Hidden by default
+   via opacity/visibility (not display:none) so the CSS transition can run —
+   see assets/js/search-overlay.js for the .is-open toggle. */
+.ren-search-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--wp--preset--color--foreground);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+}
+.ren-search-overlay.is-open {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.25s ease;
+}
+
+body.ren-search-open {
+	overflow: hidden;
+}
+
+.ren-search-overlay__close {
+	position: absolute;
+	top: 1.75rem;
+	right: 1.75rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	background: transparent;
+	border: none;
+	color: #ffffff;
+	cursor: pointer;
+	border-radius: 999px;
+	transition: background-color 0.15s ease;
+}
+.ren-search-overlay__close:hover,
+.ren-search-overlay__close:focus-visible {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ren-search-overlay__form {
+	display: flex;
+	align-items: center;
+	gap: 1.25rem;
+	width: min(90vw, 900px);
+	border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+	padding-bottom: 0.75rem;
+	transition: border-color 0.2s ease;
+}
+.ren-search-overlay__form:focus-within {
+	border-color: var(--wp--preset--color--accent);
+}
+
+.ren-search-overlay__input {
+	flex: 1;
+	background: transparent;
+	border: none;
+	color: #ffffff;
+	font-size: clamp(1.75rem, 5vw, 3.5rem);
+	font-family: inherit;
+	line-height: 1.2;
+}
+.ren-search-overlay__input::placeholder {
+	color: rgba(255, 255, 255, 0.4);
+}
+.ren-search-overlay__input:focus {
+	outline: none;
+}
+
+.ren-search-overlay__submit {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: none;
+	color: #ffffff;
+	cursor: pointer;
+	flex-shrink: 0;
+	transition: color 0.15s ease;
+}
+.ren-search-overlay__submit:hover,
+.ren-search-overlay__submit:focus-visible {
+	color: var(--wp--preset--color--accent);
+}
+
+.ren-header.is-scrolled {
+	box-shadow: 0 2px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Compensates for the header now being removed from normal document flow
+   (position:fixed) — set to the header's real rendered height by
+   assets/js/header-scroll.js, so content starts right below it with no
+   gap and nothing hidden underneath. */
+body {
+	padding-top: var(--ren-header-height, 95px);
+}
+
+/* theme.json's root blockGap (1.5rem) adds margin-block-start between every
+   top-level block — including whatever comes right after the header
+   template-part. Target the known "first section after header" patterns
+   directly by class, since WordPress may wrap alignfull+constrained blocks
+   in an extra container that the simple adjacent-sibling selector misses. */
+.ren-header + *,
+.ren-hero,
+.ren-post-hero,
+.ren-archive-header {
+	margin-block-start: 0 !important;
+	margin-top: 0 !important;
+}
