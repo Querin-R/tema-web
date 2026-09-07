@@ -35,7 +35,7 @@
 					<!-- wp:paragraph {"fontSize":"small","textColor":"muted"} -->
 					<p class="has-muted-color has-text-color has-small-font-size">By <?php echo esc_html( get_bloginfo( 'name' ) ); ?></p>
 					<!-- /wp:paragraph -->
-					<!-- wp:post-terms {"term":"category","fontSize":"small","textColor":"accent"} /-->
+					<!-- wp:post-terms {"term":"category","fontSize":"small","className":"ren-category-badge"} /-->
 				</div>
 				<!-- /wp:group -->
 
