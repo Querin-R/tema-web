@@ -99,14 +99,22 @@ function ren_copyright_shortcode() {
 add_shortcode( 'ren_copyright', 'ren_copyright_shortcode' );
 
 /**
- * [ren_reading_time] — "X min read", used in templates/single.html.
+ * [ren_reading_time] — clock icon + number + "min", used in
+ * templates/single.html. Previously plain English text ("X min read");
+ * the icon avoids mixing English into an otherwise Italian article header.
  */
 function ren_reading_time_shortcode() {
 	if ( ! is_singular( 'post' ) ) {
 		return '';
 	}
-	/* translators: %d: number of minutes */
-	return sprintf( esc_html__( '%d min read', 'ren' ), ren_reading_time() );
+
+	$icon = '<svg class="ren-clock-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg>';
+
+	return sprintf(
+		'<span class="ren-reading-time">%1$s %2$d min</span>',
+		$icon,
+		ren_reading_time()
+	);
 }
 add_shortcode( 'ren_reading_time', 'ren_reading_time_shortcode' );
 
