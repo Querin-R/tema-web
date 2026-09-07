@@ -99,19 +99,81 @@ function ren_copyright_shortcode() {
 add_shortcode( 'ren_copyright', 'ren_copyright_shortcode' );
 
 /**
+ * [ren_post_date] — calendar icon + date, used in templates/single.html
+ * in place of the core wp:post-date block. Rendering it ourselves (instead
+ * of relying on the block's fontSize/textColor attributes) is what makes
+ * the icon and the exact size/color reliable: WordPress's global styles
+ * print inline CSS that sets font-size/font-weight directly on core block
+ * markup, and that wins over the block's own attributes more often than
+ * not — see ren_reading_time_shortcode below for the same reasoning. The
+ * icon's color is set as an inline style (not just a stylesheet class) so
+ * it renders correctly regardless of the surrounding CSS cascade — e.g.
+ * inside the Hero band, which force-sets a white color on every
+ * descendant for contrast against arbitrary photos.
+ */
+function ren_meta_date_shortcode() {
+	if ( ! is_singular( 'post' ) ) {
+		return '';
+	}
+
+	$icon = '<svg class="ren-meta-icon" style="color:var(--wp--preset--color--accent)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>';
+
+	return sprintf(
+		'<span class="ren-meta-item">%1$s %2$s</span>',
+		$icon,
+		esc_html( get_the_date() )
+	);
+}
+add_shortcode( 'ren_post_date', 'ren_meta_date_shortcode' );
+
+/**
+ * [ren_post_author] — user icon + author name, used in templates/single.html
+ * in place of the core wp:post-author block. Looks up the display name
+ * directly from the post's author ID (get_post_field + get_the_author_meta)
+ * instead of calling get_the_author(), which reads the global $authordata —
+ * that global isn't reliably populated at the exact moment a shortcode
+ * inside a block template renders, which is what made the name disappear
+ * while the icon (which needs no post data) still showed up fine.
+ */
+function ren_meta_author_shortcode() {
+	if ( ! is_singular( 'post' ) ) {
+		return '';
+	}
+
+	$post_id   = get_the_ID();
+	$author_id = (int) get_post_field( 'post_author', $post_id );
+	$name      = $author_id ? get_the_author_meta( 'display_name', $author_id ) : '';
+
+	if ( ! $name ) {
+		return '';
+	}
+
+	$icon = '<svg class="ren-meta-icon" style="color:var(--wp--preset--color--accent)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+
+	return sprintf(
+		'<span class="ren-meta-item">%1$s %2$s</span>',
+		$icon,
+		esc_html( $name )
+	);
+}
+add_shortcode( 'ren_post_author', 'ren_meta_author_shortcode' );
+
+/**
  * [ren_reading_time] — clock icon + number + "min", used in
  * templates/single.html. Previously plain English text ("X min read");
  * the icon avoids mixing English into an otherwise Italian article header.
+ * Shares .ren-meta-item/.ren-meta-icon with the date/author shortcodes
+ * above so all three are sized and colored by one CSS rule in style.css.
  */
 function ren_reading_time_shortcode() {
 	if ( ! is_singular( 'post' ) ) {
 		return '';
 	}
 
-	$icon = '<svg class="ren-clock-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg>';
+	$icon = '<svg class="ren-meta-icon" style="color:var(--wp--preset--color--accent)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg>';
 
 	return sprintf(
-		'<span class="ren-reading-time">%1$s %2$d min</span>',
+		'<span class="ren-meta-item">%1$s %2$d min</span>',
 		$icon,
 		ren_reading_time()
 	);
