@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.23.0
+Version: 2.24.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -47,6 +47,16 @@ Use it to make something cool, have fun, and share what you've learned with othe
 .ren-article-meta {
 	align-items: center;
 	gap: 0.5rem;
+}
+
+/* [ren_reading_time] output — clock icon + number + "min" */
+.ren-reading-time {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+}
+.ren-clock-icon {
+	flex-shrink: 0;
 }
 
 /* Optimized reading typography for the single post body. */
@@ -767,6 +777,29 @@ body.ren-hero .ren-post-header * {
 }
 body.ren-hero .ren-post-header .ren-article-meta {
 	justify-content: center;
+}
+
+/* Darkening overlay: only when the hero background is a photo (class added
+   by inc/post-hero.php's ren_post_hero_body_class() only for bg_type=image).
+   Solid colors/gradients are picked deliberately by the author and already
+   guarantee contrast with the forced white text above, so they're left
+   untouched. .ren-post-header is already position:relative from the rule
+   above, which is what lets this ::before sit exactly over the background
+   without affecting the box's own size/flow. */
+body.ren-hero-image .ren-post-header {
+	z-index: 0;
+}
+body.ren-hero-image .ren-post-header::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.55) 100%);
+	pointer-events: none;
+}
+body.ren-hero-image .ren-post-header__inner {
+	position: relative;
+	z-index: 1;
 }
 
 /* .ren-post-header itself is 100vw wide (see above), but its title/meta
