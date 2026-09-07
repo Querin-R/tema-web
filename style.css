@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.25.0
+Version: 2.27.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -36,21 +36,21 @@ Use it to make something cool, have fun, and share what you've learned with othe
 	top: 1em;
 }
 
-/* Article meta row: date · author · reading time, all in muted small text.
-   Every text-bearing element is listed explicitly (not just .ren-article-meta
-   and generic p) because WordPress's global styles set font-size/font-weight
-   directly on <time>/.wp-block-post-author__name — an explicit rule, even a
-   low-specificity one, wins over an inherited value from the ancestor, which
-   is what caused the author name to render larger/bolder than the date. */
+/* Article meta row: date · author · reading time — icon + text pairs are
+   now rendered entirely by our own shortcodes (see inc/template-tags.php:
+   ren_meta_date_shortcode, ren_meta_author_shortcode, ren_reading_time_
+   shortcode) instead of the core wp:post-date/wp:post-author blocks. That
+   sidesteps a real WordPress quirk: global styles print inline CSS that
+   sets font-size/font-weight directly on core block markup (e.g.
+   .wp-block-post-author__name), and that explicit rule wins over a
+   block's own fontSize attribute more often than not. !important below
+   isn't just belt-and-braces — without it, a later WordPress core/global
+   styles rule of equal or higher specificity can and does win. */
 .ren-article-meta,
-.ren-article-meta p,
-.ren-article-meta time,
-.ren-article-meta .wp-block-post-author__name,
-.ren-article-meta .wp-block-shortcode,
-.ren-article-meta .ren-reading-time {
+.ren-article-meta * {
+	font-size: 16px !important;
+	font-weight: 400 !important;
 	color: var(--wp--preset--color--muted);
-	font-size: var(--wp--preset--font-size--small);
-	font-weight: 400;
 }
 
 .ren-article-meta {
@@ -58,47 +58,19 @@ Use it to make something cool, have fun, and share what you've learned with othe
 	gap: 0.5rem;
 }
 
-/* [ren_reading_time] output — clock icon + number + "min" */
-.ren-reading-time {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.3em;
-}
-.ren-clock-icon {
-	flex-shrink: 0;
-}
-
-/* Calendar icon before the date, user icon before the author name — both
-   drawn as CSS mask-image so they inherit the meta row's muted color
-   automatically (currentColor) instead of needing a second color rule. */
-.ren-article-meta .wp-block-post-date,
-.ren-article-meta .wp-block-post-author {
+/* [ren_post_date] / [ren_post_author] / [ren_reading_time] output —
+   icon + text. Icon is always sized to match the text (1em) and colored
+   Accent, regardless of the surrounding text color. */
+.ren-meta-item {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35em;
 }
-.ren-article-meta .wp-block-post-date::before,
-.ren-article-meta .wp-block-post-author::before {
-	content: "";
-	display: inline-block;
-	width: 13px;
-	height: 13px;
+.ren-meta-icon {
 	flex-shrink: 0;
-	background-color: currentColor;
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
-	-webkit-mask-size: contain;
-	mask-size: contain;
-	-webkit-mask-position: center;
-	mask-position: center;
-}
-.ren-article-meta .wp-block-post-date::before {
-	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
-	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
-}
-.ren-article-meta .wp-block-post-author::before {
-	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
-	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+	width: 1em;
+	height: 1em;
+	color: var(--wp--preset--color--accent) !important;
 }
 
 /* Category badge — filled accent-color box instead of plain colored text.
@@ -838,6 +810,9 @@ body.ren-hero .ren-post-header {
 body.ren-hero .ren-post-header,
 body.ren-hero .ren-post-header * {
 	color: #ffffff;
+}
+body.ren-hero .ren-post-header .ren-meta-icon {
+	color: var(--wp--preset--color--accent) !important;
 }
 body.ren-hero .ren-post-header .ren-article-meta {
 	justify-content: center;
