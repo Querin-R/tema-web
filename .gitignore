@@ -1,0 +1,35 @@
+# WordPress core (se mai lo includessi per errore)
+wp-admin/
+wp-includes/
+wp-config.php
+
+# Dipendenze e build
+node_modules/
+vendor/
+/dist/
+/build/
+
+# File di sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.sublime-*
+
+# Log e cache
+*.log
+.cache/
+*.tmp
+
+# File sensibili / locali
+.env
+.env.local
+*.sql
+*.sql.gz
+
+# Backup automatici di alcuni editor/FTP client
+*.bak
+*~
