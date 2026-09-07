@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.24.0
+Version: 2.25.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -36,12 +36,21 @@ Use it to make something cool, have fun, and share what you've learned with othe
 	top: 1em;
 }
 
-/* Article meta row: date · author · reading time, all in muted small text. */
+/* Article meta row: date · author · reading time, all in muted small text.
+   Every text-bearing element is listed explicitly (not just .ren-article-meta
+   and generic p) because WordPress's global styles set font-size/font-weight
+   directly on <time>/.wp-block-post-author__name — an explicit rule, even a
+   low-specificity one, wins over an inherited value from the ancestor, which
+   is what caused the author name to render larger/bolder than the date. */
 .ren-article-meta,
 .ren-article-meta p,
-.ren-article-meta .wp-block-shortcode {
+.ren-article-meta time,
+.ren-article-meta .wp-block-post-author__name,
+.ren-article-meta .wp-block-shortcode,
+.ren-article-meta .ren-reading-time {
 	color: var(--wp--preset--color--muted);
 	font-size: var(--wp--preset--font-size--small);
+	font-weight: 400;
 }
 
 .ren-article-meta {
@@ -57,6 +66,61 @@ Use it to make something cool, have fun, and share what you've learned with othe
 }
 .ren-clock-icon {
 	flex-shrink: 0;
+}
+
+/* Calendar icon before the date, user icon before the author name — both
+   drawn as CSS mask-image so they inherit the meta row's muted color
+   automatically (currentColor) instead of needing a second color rule. */
+.ren-article-meta .wp-block-post-date,
+.ren-article-meta .wp-block-post-author {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+}
+.ren-article-meta .wp-block-post-date::before,
+.ren-article-meta .wp-block-post-author::before {
+	content: "";
+	display: inline-block;
+	width: 13px;
+	height: 13px;
+	flex-shrink: 0;
+	background-color: currentColor;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	-webkit-mask-position: center;
+	mask-position: center;
+}
+.ren-article-meta .wp-block-post-date::before {
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+}
+.ren-article-meta .wp-block-post-author::before {
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+}
+
+/* Category badge — filled accent-color box instead of plain colored text.
+   Used on the wp:post-terms(category) block wherever "ren-category-badge"
+   is set as className (post hero, blog archive cards, homepage latest-news).
+   Each <a> gets its own box so multiple categories on one post still read
+   as separate pills rather than one run-together block of text. */
+.ren-category-badge {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+.ren-category-badge a {
+	display: inline-block;
+	background: var(--wp--preset--color--accent);
+	color: #ffffff;
+	padding: 0.25em 0.75em;
+	font-weight: 700;
+	text-decoration: none;
+}
+.ren-category-badge a:hover {
+	opacity: 0.85;
 }
 
 /* Optimized reading typography for the single post body. */
