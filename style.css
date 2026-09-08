@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.30.0
+Version: 2.31.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -34,6 +34,22 @@ Use it to make something cool, have fun, and share what you've learned with othe
 .ren-skip-link:focus {
 	left: 1em;
 	top: 1em;
+}
+
+/* Header row: logo, nav (collapses to a hamburger on mobile via the
+   navigation block's own overlayMenu setting) and the search icon.
+   WordPress's default flex layout wraps onto a second line once content
+   doesn't fit; nowrap keeps it a single row at every width, and the logo
+   shrinking on very small phones (see media query further down) is the
+   safety net instead. */
+.ren-header-row {
+	flex-wrap: nowrap;
+}
+@media (max-width: 380px) {
+	.ren-header-row .wp-block-site-logo img {
+		max-width: 120px;
+		height: auto;
+	}
 }
 
 /* Article meta row: date · author · reading time — icon + text pairs are
@@ -899,6 +915,7 @@ body {
 	justify-content: center;
 	width: 2.25rem;
 	height: 2.25rem;
+	flex-shrink: 0;
 	margin-left: 0.5rem;
 	padding: 0;
 	background: transparent;
