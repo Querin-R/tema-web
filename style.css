@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.39.0
+Version: 2.40.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -889,8 +889,12 @@ body.ren-hero-image .ren-post-header__inner {
    elsewhere (the "Altri articoli" grid, archive cards) — with the hero
    band already showing a background image/color for this post, showing
    the featured image again right below it would be redundant, so it's
-   hidden from the article body itself whenever hero mode is on. */
-body.ren-hero .wp-block-post-featured-image {
+   hidden from the article body itself whenever hero mode is on. Scoped to
+   .ren-current-featured-image (this post's own instance, templates/
+   single.html) rather than every .wp-block-post-featured-image on the
+   page — the earlier unscoped version was also hiding thumbnails in the
+   "Altri articoli" grid below, which belong to different posts entirely. */
+body.ren-hero .ren-current-featured-image {
 	display: none;
 }
 
