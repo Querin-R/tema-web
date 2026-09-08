@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REN_VERSION', '2.28.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
+define( 'REN_VERSION', '2.29.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
 define( 'REN_DIR', get_template_directory() );
 define( 'REN_URI', get_template_directory_uri() );
 
@@ -58,6 +58,27 @@ function ren_setup() {
 	add_image_size( 'ren-hero-bg-mobile', 900, 900, true );
 }
 add_action( 'after_setup_theme', 'ren_setup' );
+
+/**
+ * Register a "Masonry" style variant for the native core/gallery block —
+ * selectable from the block's own Styles panel, right next to "Default"
+ * and "Rounded". No third-party plugin, no separate gallery block to learn:
+ * it works on any Gallery block that already exists today, and switching
+ * back to "Default" removes it instantly. See the matching CSS in
+ * style.css (search for "is-style-ren-masonry") for how the column count
+ * reuses the block's own native "Columns" setting instead of adding a
+ * second, separate control.
+ */
+function ren_register_gallery_masonry_style() {
+	register_block_style(
+		'core/gallery',
+		array(
+			'name'  => 'ren-masonry',
+			'label' => __( 'Masonry', 'ren' ),
+		)
+	);
+}
+add_action( 'init', 'ren_register_gallery_masonry_style' );
 
 /**
  * Enqueue front-end assets.
