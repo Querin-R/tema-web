@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.31.0
+Version: 2.32.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -906,6 +906,33 @@ body {
 	z-index: 100;
 	transition: box-shadow 0.35s ease;
 	will-change: transform;
+}
+
+@media (max-width: 782px) {
+	/* Search icon before the hamburger menu on mobile only — desktop keeps
+	   its own order (logo, then the horizontal nav links, then search). The
+	   logo and search button both stay at the default order (0), which
+	   preserves their existing DOM order (logo, search); only the nav/
+	   hamburger is pushed after them. */
+	.ren-header-row .wp-block-navigation {
+		order: 3;
+	}
+}
+
+/* Mobile menu overlay: WordPress's own "is-menu-open" fixed-position dialog
+   is supposed to cover the full viewport, but our header above is
+   position:fixed AND receives a transform from header-scroll.js (for the
+   hide-on-scroll effect) — and a transformed ancestor becomes the
+   containing block for any position:fixed descendant, which traps the
+   dialog inside the header's own small height instead of the full screen.
+   :has() lets us neutralize the transform only while a menu is actually
+   open, with !important because that's the one legitimate way to beat an
+   inline style set by JS. */
+body:has(.wp-block-navigation__responsive-container.is-menu-open) .ren-header {
+	transform: none !important;
+}
+.wp-block-navigation__responsive-container.is-menu-open {
+	background-color: color-mix(in srgb, var(--wp--preset--color--background) 85%, transparent);
 }
 
 /* Search icon button in the header nav. */
