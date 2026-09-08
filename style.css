@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.32.0
+Version: 2.35.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -919,20 +919,55 @@ body {
 	}
 }
 
-/* Mobile menu overlay: WordPress's own "is-menu-open" fixed-position dialog
-   is supposed to cover the full viewport, but our header above is
-   position:fixed AND receives a transform from header-scroll.js (for the
-   hide-on-scroll effect) — and a transformed ancestor becomes the
-   containing block for any position:fixed descendant, which traps the
-   dialog inside the header's own small height instead of the full screen.
-   :has() lets us neutralize the transform only while a menu is actually
-   open, with !important because that's the one legitimate way to beat an
-   inline style set by JS. */
+/* Mobile menu overlay: WordPress's "is-menu-open" dialog is supposed to
+   cover the full viewport, but in practice it was rendering as a small
+   floating box near the top instead — partly because our fixed+transformed
+   header was trapping it (fixed below), and partly because WordPress core
+   itself applies different, non-fullscreen sizing to this dialog at some
+   intermediate viewport widths. Rather than chase the exact internal
+   WordPress logic, every relevant position/size property is pinned with
+   !important so the panel is always genuinely full-screen, at any width. */
 body:has(.wp-block-navigation__responsive-container.is-menu-open) .ren-header {
 	transform: none !important;
+	will-change: auto !important;
+}
+.wp-block-navigation__responsive-container.is-menu-open,
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
+	position: fixed !important;
+	inset: 0 !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	max-width: none !important;
+	max-height: none !important;
+	margin: 0 !important;
+	border-radius: 0 !important;
+	overflow-y: auto !important;
+	z-index: 100000 !important;
 }
 .wp-block-navigation__responsive-container.is-menu-open {
-	background-color: color-mix(in srgb, var(--wp--preset--color--background) 85%, transparent);
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+	align-items: center !important;
+	background-color: color-mix(in srgb, var(--wp--preset--color--background) 85%, transparent) !important;
+}
+/* The nav items themselves still carry the desktop menu's own layout
+   (justifyContent: right, horizontal row) via the block's own attributes —
+   override it here so the mobile panel shows a centered vertical list
+   instead of a right-aligned row that runs off the edge of the screen. */
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container {
+	flex-direction: column !important;
+	justify-content: center !important;
+	align-items: center !important;
+	width: 100% !important;
+	gap: 1.5rem !important;
+}
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item {
+	text-align: center;
 }
 
 /* Search icon button in the header nav. */
