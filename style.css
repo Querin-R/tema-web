@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.36.0
+Version: 2.38.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -95,9 +95,10 @@ Use it to make something cool, have fun, and share what you've learned with othe
    Each <a> gets its own box so multiple categories on one post still read
    as separate pills rather than one run-together block of text. */
 .ren-category-badge {
-	display: inline-flex;
+	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;
+	justify-content: var(--ren-post-meta-justify, flex-start);
 }
 .ren-category-badge a {
 	display: inline-block;
@@ -563,19 +564,22 @@ body.ren-blog-layout-list .ren-blog-card > .wp-block-group {
 body.ren-post-align-left .ren-post-header {
 	text-align: left !important;
 }
-body.ren-post-align-left .ren-post-header .ren-article-meta {
+body.ren-post-align-left .ren-post-header .ren-article-meta,
+body.ren-post-align-left .ren-post-header .ren-category-badge {
 	justify-content: flex-start !important;
 }
 body.ren-post-align-center .ren-post-header {
 	text-align: center !important;
 }
-body.ren-post-align-center .ren-post-header .ren-article-meta {
+body.ren-post-align-center .ren-post-header .ren-article-meta,
+body.ren-post-align-center .ren-post-header .ren-category-badge {
 	justify-content: center !important;
 }
 body.ren-post-align-right .ren-post-header {
 	text-align: right !important;
 }
-body.ren-post-align-right .ren-post-header .ren-article-meta {
+body.ren-post-align-right .ren-post-header .ren-article-meta,
+body.ren-post-align-right .ren-post-header .ren-category-badge {
 	justify-content: flex-end !important;
 }
 
@@ -684,8 +688,11 @@ body.ren-post-align-right .ren-post-header .ren-article-meta {
 		   thumbnail and title (which size to their own content, so
 		   align-items actually applies to them) shift right, flush with
 		   the label above them instead of sitting flush with the divider
-		   on the left. */
+		   on the left. text-align:right is needed too: without it the
+		   title text itself stayed left-aligned inside its own box even
+		   though the box (and the thumbnail) were correctly on the right. */
 		align-items: flex-end;
+		text-align: right;
 	}
 }
 .ren-post-nav__item--empty {
@@ -861,22 +868,11 @@ body.ren-hero-image .ren-post-header__inner {
 	z-index: 1;
 }
 
-/* .ren-post-header itself is 100vw wide (see above), but its title/meta
-   text shouldn't sit flush against the literal browser edge when the
-   per-post Title Alignment is left or right — that reads as a layout bug,
-   not a design choice. This inner wrapper re-introduces a sane max-width
-   + margin, matching <main>'s own 1280px/1.5rem system, so text-align:left
-   lines the title up with roughly where the rest of the page's content
-   starts instead of the viewport's true edge. (It won't match the 15%
-   grid inset of the article body pixel-for-pixel — that inset is itself
-   relative to <main>'s width, and .ren-post-header is no longer inside
-   <main>'s box at all once it's blown out to 100vw — but this gets close
-   enough that the misalignment isn't visible without a ruler.) */
-body.ren-hero .ren-post-header__inner {
-	max-width: 1280px;
-	margin: 0 auto;
-	padding: 0 1.5rem;
-}
+/* .ren-post-header__inner uses the same real WordPress "constrained"
+   layout (contentSize:1280px) as the header, set directly on the block in
+   templates/single.html — not hand-rolled CSS here — so the two align by
+   construction instead of by two independently-maintained approximations
+   staying in sync. */
 
 /* The featured image is kept only as source material for thumbnails
    elsewhere (the "Altri articoli" grid, archive cards) — with the hero
@@ -918,7 +914,7 @@ body {
 	   logo and search button both stay at the default order (0), which
 	   preserves their existing DOM order (logo, search); only the nav/
 	   hamburger is pushed after them. */
-	.ren-header-row .wp-block-navigation {
+	.ren-header-actions .wp-block-navigation {
 		order: 3;
 	}
 }
