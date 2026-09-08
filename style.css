@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.38.0
+Version: 2.39.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -816,6 +816,17 @@ body.ren-post-align-right .ren-post-header .ren-category-badge {
    further down this file, which is already needed for the sticky header
    anyway — overflow-x: hidden/clip on any ancestor would clip this
    off-screen. */
+/* <main> has its own padding-top:3.5rem (templates/single.html), meant as
+   breathing room before a normal (non-hero) post's title starts. For Hero
+   posts that just leaves an unwanted white gap between the header and the
+   full-bleed band below, which is meant to sit flush against it — so it's
+   zeroed out only when the Hero is active. !important is needed: the
+   3.5rem value is set via the block's own spacing attribute, which prints
+   as an inline style. */
+body.ren-hero main {
+	padding-top: 0 !important;
+}
+
 body.ren-hero .ren-post-header {
 	grid-column: 1 / -1;
 	position: relative;
