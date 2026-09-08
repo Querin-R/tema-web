@@ -5,11 +5,17 @@
 
 		<!-- wp:site-logo {"width":160,"shouldSyncIcon":false} /-->
 
-		<!-- wp:navigation {"overlayMenu":"mobile","layout":{"type":"flex","justifyContent":"right"},"style":{"typography":{"textTransform":"uppercase","letterSpacing":"0.08em"}}} /-->
+		<!-- wp:group {"className":"ren-header-actions","layout":{"type":"flex","justifyContent":"right"}} -->
+		<div class="wp-block-group ren-header-actions">
 
-		<!-- wp:shortcode -->
-		[ren_search_toggle]
-		<!-- /wp:shortcode -->
+			<!-- wp:navigation {"overlayMenu":"mobile","layout":{"type":"flex","justifyContent":"right"},"style":{"typography":{"textTransform":"uppercase","letterSpacing":"0.08em"}}} /-->
+
+			<!-- wp:shortcode -->
+			[ren_search_toggle]
+			<!-- /wp:shortcode -->
+
+		</div>
+		<!-- /wp:group -->
 
 	</div>
 	<!-- /wp:group -->
