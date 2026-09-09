@@ -228,7 +228,7 @@ function ren_register_settings() {
 	add_settings_field( 'ren_blog_columns', __( 'Blog Columns', 'ren' ), 'ren_field_blog_columns', 'ren-tab-blog', 'ren_blog_section' );
 	add_settings_field( 'ren_portfolio_columns', __( 'Portfolio Columns', 'ren' ), 'ren_field_portfolio_columns', 'ren-tab-blog', 'ren_blog_section' );
 	add_settings_field( 'ren_post_title_align', __( 'Post Title Alignment', 'ren' ), 'ren_field_post_title_align', 'ren-tab-blog', 'ren_blog_section' );
-	add_settings_field( 'ren_post_nav_placeholder', __( 'Previous/Next Placeholder Image', 'ren' ), 'ren_field_post_nav_placeholder', 'ren-tab-blog', 'ren_blog_section' );
+	add_settings_field( 'ren_post_nav_placeholder', __( 'Default Featured Image', 'ren' ), 'ren_field_post_nav_placeholder', 'ren-tab-blog', 'ren_blog_section' );
 	add_settings_field( 'ren_color_more_articles_bg', __( '"Altri Articoli" Background', 'ren' ), 'ren_field_color_more_articles_bg', 'ren-tab-blog', 'ren_blog_section' );
 
 	// ── Colors ────────────────────────────────────────────────
@@ -769,7 +769,7 @@ function ren_field_post_nav_placeholder() {
 	<input type="hidden" name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[post_nav_placeholder_id]" id="ren-post-nav-placeholder-id" value="<?php echo esc_attr( $image_id ); ?>" />
 	<button type="button" class="button" id="ren-post-nav-placeholder-upload"><?php esc_html_e( 'Choose Image', 'ren' ); ?></button>
 	<button type="button" class="button" id="ren-post-nav-placeholder-remove"><?php esc_html_e( 'Remove', 'ren' ); ?></button>
-	<p class="description"><?php esc_html_e( 'Shown in the Previous/Next card at the end of a post whenever that adjacent post has no featured image set. Leave empty to just hide the thumbnail in that case, as before.', 'ren' ); ?></p>
+	<p class="description"><?php esc_html_e( 'Used everywhere a post, page or portfolio project is missing its own featured image: the "Altri articoli" grid, the blog archive, the Previous/Next card, and anywhere else on the site a featured image is displayed. Leave empty to just show nothing in that case, as before.', 'ren' ); ?></p>
 	<?php
 }
 
