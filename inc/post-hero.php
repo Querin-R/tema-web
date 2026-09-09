@@ -16,94 +16,98 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register the hero meta fields.
+ * Register the hero meta fields, on both posts and pages.
  */
 function ren_register_post_hero_meta() {
-	register_post_meta(
-		'post',
-		'ren_hero_enabled',
-		array(
-			'type'          => 'boolean',
-			'single'        => true,
-			'show_in_rest'  => true,
-			'auth_callback' => function () {
-				return current_user_can( 'edit_posts' );
-			},
-		)
-	);
+	foreach ( array( 'post', 'page' ) as $post_type ) {
+		register_post_meta(
+			$post_type,
+			'ren_hero_enabled',
+			array(
+				'type'          => 'boolean',
+				'single'        => true,
+				'show_in_rest'  => true,
+				'auth_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
 
-	register_post_meta(
-		'post',
-		'ren_hero_bg_type',
-		array(
-			'type'              => 'string',
-			'single'            => true,
-			'show_in_rest'      => true,
-			'sanitize_callback' => function ( $value ) {
-				return 'image' === $value ? 'image' : 'color';
-			},
-			'auth_callback'     => function () {
-				return current_user_can( 'edit_posts' );
-			},
-		)
-	);
+		register_post_meta(
+			$post_type,
+			'ren_hero_bg_type',
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => true,
+				'sanitize_callback' => function ( $value ) {
+					return 'image' === $value ? 'image' : 'color';
+				},
+				'auth_callback'     => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
 
-	register_post_meta(
-		'post',
-		'ren_hero_bg_color',
-		array(
-			'type'              => 'string',
-			'single'            => true,
-			'show_in_rest'      => true,
-			'sanitize_callback' => 'sanitize_hex_color',
-			'auth_callback'     => function () {
-				return current_user_can( 'edit_posts' );
-			},
-		)
-	);
+		register_post_meta(
+			$post_type,
+			'ren_hero_bg_color',
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => true,
+				'sanitize_callback' => 'sanitize_hex_color',
+				'auth_callback'     => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
 
-	register_post_meta(
-		'post',
-		'ren_hero_bg_gradient',
-		array(
-			'type'              => 'string',
-			'single'            => true,
-			'show_in_rest'      => true,
-			'sanitize_callback' => 'sanitize_text_field',
-			'auth_callback'     => function () {
-				return current_user_can( 'edit_posts' );
-			},
-		)
-	);
+		register_post_meta(
+			$post_type,
+			'ren_hero_bg_gradient',
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => true,
+				'sanitize_callback' => 'sanitize_text_field',
+				'auth_callback'     => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
 
-	register_post_meta(
-		'post',
-		'ren_hero_bg_image',
-		array(
-			'type'              => 'integer',
-			'single'            => true,
-			'show_in_rest'      => true,
-			'sanitize_callback' => 'absint',
-			'auth_callback'     => function () {
-				return current_user_can( 'edit_posts' );
-			},
-		)
-	);
+		register_post_meta(
+			$post_type,
+			'ren_hero_bg_image',
+			array(
+				'type'              => 'integer',
+				'single'            => true,
+				'show_in_rest'      => true,
+				'sanitize_callback' => 'absint',
+				'auth_callback'     => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+	}
 }
 add_action( 'init', 'ren_register_post_hero_meta' );
 
 /**
- * Meta box.
+ * Meta box, on both posts and pages.
  */
 function ren_add_post_hero_meta_box() {
-	add_meta_box(
-		'ren_post_hero',
-		__( 'Hero', 'ren' ),
-		'ren_render_post_hero_meta_box',
-		'post',
-		'side',
-		'default'
-	);
+	foreach ( array( 'post', 'page' ) as $post_type ) {
+		add_meta_box(
+			'ren_post_hero',
+			__( 'Hero', 'ren' ),
+			'ren_render_post_hero_meta_box',
+			$post_type,
+			'side',
+			'default'
+		);
+	}
 }
 add_action( 'add_meta_boxes', 'ren_add_post_hero_meta_box' );
 
@@ -207,6 +211,7 @@ function ren_save_post_hero_meta( $post_id ) {
 	}
 }
 add_action( 'save_post_post', 'ren_save_post_hero_meta' );
+add_action( 'save_post_page', 'ren_save_post_hero_meta' );
 
 /**
  * Body class so style.css can target just this page.
@@ -215,7 +220,7 @@ add_action( 'save_post_post', 'ren_save_post_hero_meta' );
  * @return array
  */
 function ren_post_hero_body_class( $classes ) {
-	if ( is_singular( 'post' ) && get_post_meta( get_the_ID(), 'ren_hero_enabled', true ) ) {
+	if ( is_singular( array( 'post', 'page' ) ) && get_post_meta( get_the_ID(), 'ren_hero_enabled', true ) ) {
 		$classes[] = 'ren-hero';
 
 		$post_id = get_the_ID();
@@ -239,7 +244,7 @@ add_filter( 'body_class', 'ren_post_hero_body_class' );
  * post hasn't set anything of its own.
  */
 function ren_post_hero_inline_style() {
-	if ( ! is_singular( 'post' ) || ! get_post_meta( get_the_ID(), 'ren_hero_enabled', true ) ) {
+	if ( ! is_singular( array( 'post', 'page' ) ) || ! get_post_meta( get_the_ID(), 'ren_hero_enabled', true ) ) {
 		return;
 	}
 
@@ -294,7 +299,7 @@ function ren_post_hero_admin_assets( $hook ) {
 	if ( ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
 		return;
 	}
-	if ( 'post' !== get_current_screen()->post_type ) {
+	if ( ! in_array( get_current_screen()->post_type, array( 'post', 'page' ), true ) ) {
 		return;
 	}
 
