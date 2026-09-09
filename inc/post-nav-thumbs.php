@@ -53,6 +53,15 @@ function ren_post_nav_render_side( $adjacent, $direction ) {
 			<span class="ren-post-nav__thumb">
 				<?php echo get_the_post_thumbnail( $adjacent, 'medium', array( 'loading' => 'lazy', 'alt' => get_the_title( $adjacent ) ) ); ?>
 			</span>
+		<?php else :
+			$fallback_id  = (int) ren_get_options()['post_nav_placeholder_id'];
+			$fallback_url = $fallback_id ? wp_get_attachment_image_url( $fallback_id, 'medium' ) : '';
+			if ( $fallback_url ) :
+				?>
+				<span class="ren-post-nav__thumb">
+					<img src="<?php echo esc_url( $fallback_url ); ?>" loading="lazy" alt="" />
+				</span>
+			<?php endif; ?>
 		<?php endif; ?>
 		<span class="ren-post-nav__title"><?php echo esc_html( get_the_title( $adjacent ) ); ?></span>
 	</a>
