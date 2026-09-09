@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.53.0
+Version: 2.54.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -507,6 +507,17 @@ Use it to make something cool, have fun, and share what you've learned with othe
    exact area (see the .wp-block-post-template comment above for the
    first one) — so this is pinned in CSS too rather than trusted to
    resolve correctly on its own going forward. */
+
+/* Scoped to .ren-blog-query specifically, not just ".wp-block-post-
+   template" alone: that class is reused by every Query Loop block on
+   the site, including the unrelated "Altri articoli" grid at the bottom
+   of a post (parts/post-more-articles.html). body.ren-blog-layout-grid
+   is a site-wide body class (from the "Archive Layout" Theme Option),
+   present on every page — so an unscoped selector here was silently
+   forcing "Altri articoli" to use the *blog's* column count (3) instead
+   of its own hardcoded 4, since both are simultaneously true on a
+   single post page. Confirmed bug, not a hypothetical: this is exactly
+   why that grid was rendering 4 posts across 3 columns instead of 4. */
 .ren-blog-query {
 	max-width: 1280px;
 	width: 100%;
@@ -514,7 +525,7 @@ Use it to make something cool, have fun, and share what you've learned with othe
 	margin-right: auto;
 }
 
-body.ren-blog-layout-grid .wp-block-post-template {
+body.ren-blog-layout-grid .ren-blog-query .wp-block-post-template {
 	display: grid;
 	grid-template-columns: repeat(var(--ren-blog-columns, 3), minmax(0, 1fr));
 	gap: 2rem 1.5rem;
@@ -523,18 +534,21 @@ body.ren-blog-layout-grid .wp-block-post-template {
 	padding: 0;
 }
 @media (max-width: 900px) {
-	body.ren-blog-layout-grid .wp-block-post-template {
+	body.ren-blog-layout-grid .ren-blog-query .wp-block-post-template {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
 @media (max-width: 600px) {
-	body.ren-blog-layout-grid .wp-block-post-template {
+	body.ren-blog-layout-grid .ren-blog-query .wp-block-post-template {
 		grid-template-columns: 1fr;
 	}
 }
 
-/* Blog archive layout: List (image beside text) — see Theme Options → Blog. */
-body.ren-blog-layout-list .wp-block-post-template {
+/* Blog archive layout: List (image beside text) — see Theme Options → Blog.
+   Same scoping fix as the grid rule above: without .ren-blog-query, this
+   would also force "Altri articoli" into a single column whenever List
+   mode is selected for the blog, which has nothing to do with it. */
+body.ren-blog-layout-list .ren-blog-query .wp-block-post-template {
 	grid-template-columns: 1fr !important;
 	gap: 1.5rem !important;
 }
@@ -663,8 +677,30 @@ body.ren-post-align-right .ren-post-header .ren-category-badge {
 	padding: 0 1.5rem;
 }
 
-.ren-more-articles .is-layout-grid {
+/* Same defensive approach as the blog grid above: don't rely on
+   Gutenberg reliably adding .is-layout-grid + its own generated
+   grid-template-columns from the wp:post-template block's "layout"
+   attribute (parts/post-more-articles.html sets columnCount:4) — that
+   mechanism has already proven unreliable elsewhere in this project.
+   display:grid + an explicit 4-column template set directly here removes
+   the dependency, matching the block's own intended column count. */
+.ren-more-articles .wp-block-post-template {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 2rem 1.5rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+@media (max-width: 900px) {
+	.ren-more-articles .wp-block-post-template {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+@media (max-width: 600px) {
+	.ren-more-articles .wp-block-post-template {
+		grid-template-columns: 1fr;
+	}
 }
 /* The block's own aspectRatio:"4/3" setting scales the image relative to
    its grid column — which grew a lot once this whole section became
