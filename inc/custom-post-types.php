@@ -113,36 +113,40 @@ add_action( 'init', 'ren_register_portfolio_cpt' );
  * Center, or Right — or "Auto" to just follow the global setting).
  */
 function ren_register_post_title_align_meta() {
-	register_post_meta(
-		'post',
-		'ren_title_align',
-		array(
-			'type'              => 'string',
-			'single'            => true,
-			'show_in_rest'      => true,
-			'sanitize_callback' => function ( $value ) {
-				return in_array( $value, array( 'left', 'center', 'right' ), true ) ? $value : '';
-			},
-			'auth_callback'     => function () {
-				return current_user_can( 'edit_posts' );
-			},
-		)
-	);
+	foreach ( array( 'post', 'page' ) as $post_type ) {
+		register_post_meta(
+			$post_type,
+			'ren_title_align',
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => true,
+				'sanitize_callback' => function ( $value ) {
+					return in_array( $value, array( 'left', 'center', 'right' ), true ) ? $value : '';
+				},
+				'auth_callback'     => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+	}
 }
 add_action( 'init', 'ren_register_post_title_align_meta' );
 
 /**
- * Meta box: lets a single post override the site-wide title alignment.
+ * Meta box: lets a single post or page override the site-wide title alignment.
  */
 function ren_add_post_title_align_meta_box() {
-	add_meta_box(
-		'ren_post_title_align',
-		__( 'Title Alignment', 'ren' ),
-		'ren_render_post_title_align_meta_box',
-		'post',
-		'side',
-		'default'
-	);
+	foreach ( array( 'post', 'page' ) as $post_type ) {
+		add_meta_box(
+			'ren_post_title_align',
+			__( 'Title Alignment', 'ren' ),
+			'ren_render_post_title_align_meta_box',
+			$post_type,
+			'side',
+			'default'
+		);
+	}
 }
 add_action( 'add_meta_boxes', 'ren_add_post_title_align_meta_box' );
 
@@ -193,6 +197,7 @@ function ren_save_post_title_align( $post_id ) {
 	}
 }
 add_action( 'save_post_post', 'ren_save_post_title_align' );
+add_action( 'save_post_page', 'ren_save_post_title_align' );
 
 /**
  * Add a body class reflecting this post's alignment override, if any —
@@ -201,9 +206,22 @@ add_action( 'save_post_post', 'ren_save_post_title_align' );
  * @param array $classes Existing body classes.
  * @return array
  */
+/**
+ * Add a body class reflecting this post's alignment override, if any —
+ * lets style.css target just this page without touching every other post.
+ * Uses the same "which post/page's settings actually apply right now"
+ * resolution as the Hero feature (inc/post-hero.php), so this also
+ * correctly picks up the Blog page's own override while viewing the
+ * post listing itself (is_home()), not just when visiting that page
+ * directly by URL.
+ *
+ * @param array $classes Existing body classes.
+ * @return array
+ */
 function ren_post_title_align_body_class( $classes ) {
-	if ( is_singular( 'post' ) ) {
-		$value = get_post_meta( get_the_ID(), 'ren_title_align', true );
+	$post_id = function_exists( 'ren_hero_context_post_id' ) ? ren_hero_context_post_id() : ( is_singular( array( 'post', 'page' ) ) ? get_the_ID() : 0 );
+	if ( $post_id ) {
+		$value = get_post_meta( $post_id, 'ren_title_align', true );
 		if ( in_array( $value, array( 'left', 'center', 'right' ), true ) ) {
 			$classes[] = 'ren-post-align-' . $value;
 		}
