@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REN_VERSION', '2.46.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
+define( 'REN_VERSION', '2.48.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
 define( 'REN_DIR', get_template_directory() );
 define( 'REN_URI', get_template_directory_uri() );
 
@@ -212,6 +212,7 @@ add_action( 'init', 'ren_register_pattern_categories' );
 require_once REN_DIR . '/inc/custom-post-types.php';
 require_once REN_DIR . '/inc/post-hero.php';
 require_once REN_DIR . '/inc/post-nav-thumbs.php';
+require_once REN_DIR . '/inc/default-featured-image.php';
 require_once REN_DIR . '/inc/more-articles.php';
 require_once REN_DIR . '/inc/archive-title.php';
 require_once REN_DIR . '/inc/theme-options.php';
