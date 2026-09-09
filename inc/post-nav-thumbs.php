@@ -64,6 +64,11 @@ function ren_post_nav_render_side( $adjacent, $direction ) {
 				// the bug this replaced.
 				$fallback_url = wp_get_attachment_image_url( $fallback_id, 'full' );
 			}
+			// TEMPORARY diagnostic — remove once the fallback is confirmed
+			// working. Shows exactly what this code resolved, right in the
+			// page source, since the logic reads fine on paper but isn't
+			// producing an <img> on the live site.
+			echo '<!-- REN DEBUG fallback_id=' . esc_html( $fallback_id ) . ' fallback_url=' . esc_html( $fallback_url ) . ' -->';
 			if ( $fallback_url ) :
 				?>
 				<span class="ren-post-nav__thumb">
