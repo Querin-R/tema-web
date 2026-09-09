@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.41.0
+Version: 2.46.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -146,7 +146,7 @@ Use it to make something cool, have fun, and share what you've learned with othe
 /* Portfolio grid cards. */
 .ren-grid {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(var(--ren-portfolio-columns, 3), 1fr);
 	gap: 2rem;
 	list-style: none;
 	margin: 0;
@@ -483,6 +483,36 @@ Use it to make something cool, have fun, and share what you've learned with othe
 		letter-spacing: 0.03em;
 		color: var(--wp--preset--color--muted);
 		margin-bottom: 0.15rem;
+	}
+}
+
+/* Blog archive layout: Grid (default) — see Theme Options → Blog. This
+   used to rely entirely on Gutenberg's own generated .is-layout-grid
+   class + grid-template-columns rule, produced from the "layout"
+   attribute set on the wp:post-template block in templates/archive.html.
+   That class wasn't reliably appearing on the rendered <ul> though — a
+   real, confirmed bug (checked the published page's source directly),
+   not a caching artifact. Setting display:grid explicitly here removes
+   that dependency entirely. It also turns out to be the base the "list"
+   layout's rule below already assumed existed (that rule only overrides
+   grid-template-columns, not display:grid itself) — so until now, list
+   mode didn't fully work either, for the same underlying reason. */
+body.ren-blog-layout-grid .wp-block-post-template {
+	display: grid;
+	grid-template-columns: repeat(var(--ren-blog-columns, 3), minmax(0, 1fr));
+	gap: 2rem 1.5rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+@media (max-width: 900px) {
+	body.ren-blog-layout-grid .wp-block-post-template {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+@media (max-width: 600px) {
+	body.ren-blog-layout-grid .wp-block-post-template {
+		grid-template-columns: 1fr;
 	}
 }
 
