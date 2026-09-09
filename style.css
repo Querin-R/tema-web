@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.49.0
+Version: 2.50.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -497,6 +497,23 @@ Use it to make something cool, have fun, and share what you've learned with othe
    layout's rule below already assumed existed (that rule only overrides
    grid-template-columns, not display:grid itself) — so until now, list
    mode didn't fully work either, for the same underlying reason. */
+/* Belt-and-suspenders alongside templates/archive.html's explicit
+   "layout":{"type":"default"} on the wp:query block: without any layout
+   type set at all, WordPress's own default for the Query block resolves
+   to "constrained", which applies theme.json's root contentSize (800px)
+   — a page-width value, never intended for this 1280px-wide blog grid.
+   That's a second, independent instance of Gutenberg's layout system
+   doing something other than what the template author asked for in this
+   exact area (see the .wp-block-post-template comment above for the
+   first one) — so this is pinned in CSS too rather than trusted to
+   resolve correctly on its own going forward. */
+.ren-blog-query {
+	max-width: 1280px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 body.ren-blog-layout-grid .wp-block-post-template {
 	display: grid;
 	grid-template-columns: repeat(var(--ren-blog-columns, 3), minmax(0, 1fr));
@@ -1151,6 +1168,20 @@ body {
 .ren-archive-header {
 	margin-block-start: 0 !important;
 	margin-top: 0 !important;
+}
+
+/* Bottom spacing between the archive title/hero band and the post grid
+   below it (templates/index.html). Deliberately its own rule rather than
+   folded into .ren-post-header directly: that class is shared with
+   single.html/page.html, where the post-title block's own margin already
+   handles this spacing — adding it there too would double up. Specific
+   enough (two classes) that body.ren-hero .ren-post-header's own
+   margin-bottom still wins when Hero is active on the Blog page. */
+.ren-post-header.ren-archive-header {
+	margin-bottom: 2.5rem;
+}
+body.ren-hero .ren-post-header.ren-archive-header {
+	margin-bottom: 3.5rem;
 }
 
 /* "Masonry" style variant for the native core/gallery block (registered in
