@@ -58,6 +58,8 @@ function ren_default_options() {
 
 		// Blog — archive layout.
 		'blog_layout' => 'grid',
+		'blog_columns' => 3,
+		'portfolio_columns' => 3,
 		'post_title_align' => 'left',
 		'post_nav_placeholder_id' => 0,
 		'color_more_articles_bg' => '',
@@ -223,6 +225,8 @@ function ren_register_settings() {
 		'ren-tab-blog'
 	);
 	add_settings_field( 'ren_blog_layout', __( 'Archive Layout', 'ren' ), 'ren_field_blog_layout', 'ren-tab-blog', 'ren_blog_section' );
+	add_settings_field( 'ren_blog_columns', __( 'Blog Columns', 'ren' ), 'ren_field_blog_columns', 'ren-tab-blog', 'ren_blog_section' );
+	add_settings_field( 'ren_portfolio_columns', __( 'Portfolio Columns', 'ren' ), 'ren_field_portfolio_columns', 'ren-tab-blog', 'ren_blog_section' );
 	add_settings_field( 'ren_post_title_align', __( 'Post Title Alignment', 'ren' ), 'ren_field_post_title_align', 'ren-tab-blog', 'ren_blog_section' );
 	add_settings_field( 'ren_post_nav_placeholder', __( 'Previous/Next Placeholder Image', 'ren' ), 'ren_field_post_nav_placeholder', 'ren-tab-blog', 'ren_blog_section' );
 	add_settings_field( 'ren_color_more_articles_bg', __( '"Altri Articoli" Background', 'ren' ), 'ren_field_color_more_articles_bg', 'ren-tab-blog', 'ren_blog_section' );
@@ -307,6 +311,8 @@ function ren_sanitize_options( $input ) {
 
 	// Blog — archive layout.
 	$clean['blog_layout'] = isset( $input['blog_layout'] ) && 'list' === $input['blog_layout'] ? 'list' : 'grid';
+	$clean['blog_columns'] = isset( $input['blog_columns'] ) && in_array( (int) $input['blog_columns'], array( 2, 3, 4 ), true ) ? (int) $input['blog_columns'] : 3;
+	$clean['portfolio_columns'] = isset( $input['portfolio_columns'] ) && in_array( (int) $input['portfolio_columns'], array( 2, 3, 4 ), true ) ? (int) $input['portfolio_columns'] : 3;
 	$clean['post_title_align'] = isset( $input['post_title_align'] ) && in_array( $input['post_title_align'], array( 'left', 'center', 'right' ), true ) ? $input['post_title_align'] : 'left';
 	$clean['post_nav_placeholder_id'] = isset( $input['post_nav_placeholder_id'] ) ? absint( $input['post_nav_placeholder_id'] ) : 0;
 
@@ -701,6 +707,32 @@ function ren_field_blog_layout() {
 			<?php echo esc_html( $label ); ?>
 		</label>
 	<?php endforeach; ?>
+	<?php
+}
+
+/** Field: number of columns in the Blog archive grid (also used by the "List" layout's own image, unaffected). */
+function ren_field_blog_columns() {
+	$options = ren_get_options();
+	?>
+	<select name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[blog_columns]">
+		<?php foreach ( array( 2, 3, 4 ) as $count ) : ?>
+			<option value="<?php echo esc_attr( $count ); ?>" <?php selected( $options['blog_columns'], $count ); ?>><?php echo esc_html( $count ); ?></option>
+		<?php endforeach; ?>
+	</select>
+	<p class="description"><?php esc_html_e( 'Only applies to the "Grid" archive layout above. Automatically reduces on smaller screens regardless of this setting.', 'ren' ); ?></p>
+	<?php
+}
+
+/** Field: number of columns in the Portfolio archive grid. */
+function ren_field_portfolio_columns() {
+	$options = ren_get_options();
+	?>
+	<select name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[portfolio_columns]">
+		<?php foreach ( array( 2, 3, 4 ) as $count ) : ?>
+			<option value="<?php echo esc_attr( $count ); ?>" <?php selected( $options['portfolio_columns'], $count ); ?>><?php echo esc_html( $count ); ?></option>
+		<?php endforeach; ?>
+	</select>
+	<p class="description"><?php esc_html_e( 'Automatically reduces on smaller screens regardless of this setting.', 'ren' ); ?></p>
 	<?php
 }
 
@@ -1217,6 +1249,8 @@ function ren_get_dynamic_css() {
 	$lines[] = '--wp--custom--color--link-hover: ' . $link_hover_color . ';';
 	$lines[] = '--wp--custom--color--post-hero: ' . $post_hero_color . ';';
 	$lines[] = '--ren-more-articles-bg: ' . ( $options['color_more_articles_bg'] ? $options['color_more_articles_bg'] : '#f0f0f0' ) . ';';
+	$lines[] = '--ren-blog-columns: ' . absint( $options['blog_columns'] ) . ';';
+	$lines[] = '--ren-portfolio-columns: ' . absint( $options['portfolio_columns'] ) . ';';
 	$lines[] = '--ren-header-height: ' . absint( $options['header_height'] ) . 'px;';
 	$lines[] = '--ren-header-reveal-speed: ' . absint( $options['header_reveal_speed'] ) . 'ms;';
 
