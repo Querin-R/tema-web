@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REN_VERSION', '2.54.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
+define( 'REN_VERSION', '2.56.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
 define( 'REN_DIR', get_template_directory() );
 define( 'REN_URI', get_template_directory_uri() );
 
@@ -47,6 +47,7 @@ function ren_setup() {
 	add_image_size( 'ren-project-card', 900, 1100, true );
 	add_image_size( 'ren-project-hero', 2000, 1200, true );
 	add_image_size( 'ren-blog-card', 800, 600, true );
+	add_image_size( 'ren-prevnext', 150, 100, true );
 
 	// Magazine Hero background: a full-bleed CSS background-image, served
 	// at a fixed 2400x1200 crop on desktop and a much lighter 900x900 crop
