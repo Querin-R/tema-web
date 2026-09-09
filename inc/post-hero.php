@@ -214,16 +214,40 @@ add_action( 'save_post_post', 'ren_save_post_hero_meta' );
 add_action( 'save_post_page', 'ren_save_post_hero_meta' );
 
 /**
+ * The post/page ID whose Hero settings should apply to the current
+ * request. Normally that's just the current singular post/page — but the
+ * main blog listing (is_home(), e.g. templates/index.html) isn't
+ * "singular" at all despite being tied to a real, editable Page (the one
+ * assigned in Impostazioni → Lettura → Pagina articoli): without this,
+ * that Page's own Hero meta box would only ever apply if someone visited
+ * it directly by URL, which never happens once it's set as the posts
+ * page. Returns 0 when Hero doesn't apply to the current request at all.
+ *
+ * @return int
+ */
+function ren_hero_context_post_id() {
+	if ( is_singular( array( 'post', 'page' ) ) ) {
+		return get_the_ID();
+	}
+
+	if ( is_home() && ! is_front_page() ) {
+		return (int) get_option( 'page_for_posts' );
+	}
+
+	return 0;
+}
+
+/**
  * Body class so style.css can target just this page.
  *
  * @param array $classes Existing body classes.
  * @return array
  */
 function ren_post_hero_body_class( $classes ) {
-	if ( is_singular( array( 'post', 'page' ) ) && get_post_meta( get_the_ID(), 'ren_hero_enabled', true ) ) {
+	$post_id = ren_hero_context_post_id();
+	if ( $post_id && get_post_meta( $post_id, 'ren_hero_enabled', true ) ) {
 		$classes[] = 'ren-hero';
 
-		$post_id = get_the_ID();
 		$bg_type = get_post_meta( $post_id, 'ren_hero_bg_type', true );
 		$has_img = (int) get_post_meta( $post_id, 'ren_hero_bg_image', true );
 
@@ -244,11 +268,11 @@ add_filter( 'body_class', 'ren_post_hero_body_class' );
  * post hasn't set anything of its own.
  */
 function ren_post_hero_inline_style() {
-	if ( ! is_singular( array( 'post', 'page' ) ) || ! get_post_meta( get_the_ID(), 'ren_hero_enabled', true ) ) {
+	$post_id = ren_hero_context_post_id();
+	if ( ! $post_id || ! get_post_meta( $post_id, 'ren_hero_enabled', true ) ) {
 		return;
 	}
 
-	$post_id      = get_the_ID();
 	$bg_type      = get_post_meta( $post_id, 'ren_hero_bg_type', true );
 	$bg_type      = 'image' === $bg_type ? 'image' : 'color';
 	$bg_value     = '';
