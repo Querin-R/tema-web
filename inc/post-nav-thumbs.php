@@ -51,11 +51,19 @@ function ren_post_nav_render_side( $adjacent, $direction ) {
 		</span>
 		<?php if ( has_post_thumbnail( $adjacent ) ) : ?>
 			<span class="ren-post-nav__thumb">
-				<?php echo get_the_post_thumbnail( $adjacent, 'medium', array( 'loading' => 'lazy', 'alt' => get_the_title( $adjacent ) ) ); ?>
+				<?php echo get_the_post_thumbnail( $adjacent, 'ren-prevnext', array( 'loading' => 'lazy', 'alt' => get_the_title( $adjacent ) ) ); ?>
 			</span>
 		<?php else :
 			$fallback_id  = (int) ren_get_options()['post_nav_placeholder_id'];
-			$fallback_url = $fallback_id ? wp_get_attachment_image_url( $fallback_id, 'medium' ) : '';
+			$fallback_url = $fallback_id ? wp_get_attachment_image_url( $fallback_id, 'ren-prevnext' ) : '';
+			if ( $fallback_id && ! $fallback_url ) {
+				// The ren-prevnext size didn't exist for this attachment yet
+				// (e.g. it was uploaded before this size was registered, or
+				// before "Regenerate Thumbnails" was run for it) — fall back
+				// to the original file rather than showing nothing, same as
+				// the bug this replaced.
+				$fallback_url = wp_get_attachment_image_url( $fallback_id, 'full' );
+			}
 			if ( $fallback_url ) :
 				?>
 				<span class="ren-post-nav__thumb">
