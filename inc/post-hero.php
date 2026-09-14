@@ -254,6 +254,16 @@ function ren_post_hero_body_class( $classes ) {
 		if ( 'image' === $bg_type && $has_img ) {
 			$classes[] = 'ren-hero-image';
 		}
+	} elseif ( is_category() || is_tag() || is_tax() || is_author() ) {
+		// Category/tag/author archives always get the hero band — there's
+		// no single Page they could attach a Hero on/off toggle to, so
+		// this just always uses the site-wide fallback color (Opzioni
+		// Tema → Colori → Post Hero Background) instead. No
+		// ren_post_hero_inline_style() branch needed for this case: the
+		// CSS itself already falls back to that same color whenever
+		// --ren-hero-bg isn't set inline (see style.css), which is
+		// exactly what "no per-archive override" should look like.
+		$classes[] = 'ren-hero';
 	}
 	return $classes;
 }
