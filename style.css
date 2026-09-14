@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.59.0
+Version: 2.61.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -726,12 +726,16 @@ body.ren-post-align-right .ren-post-header .ren-category-badge {
    to discover older pages, so nothing about the real navigation
    mechanism changes here, only how it looks.
 
-   Colors are local variables right on .wp-block-query-pagination on
-   purpose, not global theme.json/preset colors — easy to override with
-   three lines of CSS once real values are picked, without having to
-   track down every individual rule below that uses them. */
+   Colors are local variables right on .wp-block-query-pagination, easy
+   to override with a few lines of CSS once real values are picked,
+   without having to track down every individual rule below that uses
+   them. --ren-pg-accent specifically defaults to the theme's own Accent
+   Color (Opzioni Tema → Branding) rather than a fixed hex, so changing
+   that one setting in the panel updates the pagination too — the other
+   four (border/bg/text/muted) are plain placeholder values René asked
+   to pick himself once he sees this live. */
 .wp-block-query-pagination {
-	--ren-pg-accent: #6d5dfc;
+	--ren-pg-accent: var(--wp--preset--color--accent);
 	--ren-pg-border: #dddddd;
 	--ren-pg-bg: #f8f8fb;
 	--ren-pg-text: #555555;
