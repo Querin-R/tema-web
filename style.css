@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.61.0
+Version: 2.62.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -542,6 +542,22 @@ body.ren-blog-layout-grid .ren-blog-query .wp-block-post-template {
 	body.ren-blog-layout-grid .ren-blog-query .wp-block-post-template {
 		grid-template-columns: 1fr;
 	}
+}
+
+/* WordPress core gives every group with a background color its own
+   default padding (:where(.wp-block-group.has-background) { padding:
+   1.25em 2.375em; } in block-library/style.css) — .ren-blog-card has
+   has-background for its surface-tinted fill, so it was inheriting that
+   padding on ALL sides, including above the featured image, pushing it
+   inward instead of letting it sit flush at the card's top edge. The
+   text content below the image already has its own explicit padding
+   (set directly on the inner group in archive.html/index.html), so this
+   outer padding was pure redundant space, not a real gap intentionally
+   left for anything. :where() gives core's own selector zero
+   specificity, so a plain class selector like this one is already
+   enough to override it — no !important needed. */
+.ren-blog-card.has-background {
+	padding: 0;
 }
 
 /* Blog archive layout: List (image beside text) — see Theme Options → Blog.
