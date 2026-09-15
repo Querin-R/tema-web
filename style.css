@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.62.0
+Version: 2.63.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -1015,7 +1015,14 @@ body.ren-hero .ren-post-header {
 	margin-left: -50vw;
 	margin-right: -50vw;
 	background: var(--ren-hero-bg, var(--wp--custom--color--post-hero));
-	text-align: center;
+	/* text-align/justify-content here used to be hardcoded to "center",
+	   completely independent of the site's own Title Alignment system
+	   (Opzioni Tema → Blog, plus the per-post override) — meaning
+	   turning Hero on silently ignored whatever alignment was chosen
+	   everywhere else. Reading the same variables as the non-hero
+	   .ren-post-header rule further down keeps the two systems in sync:
+	   Hero changes the background, not the alignment logic. */
+	text-align: var(--ren-post-title-align, center);
 	padding: 3.5rem 0;
 	margin-bottom: 3.5rem;
 	border-radius: 0;
@@ -1032,7 +1039,7 @@ body.ren-hero .ren-post-header .ren-meta-icon {
 	color: var(--wp--preset--color--accent) !important;
 }
 body.ren-hero .ren-post-header .ren-article-meta {
-	justify-content: center;
+	justify-content: var(--ren-post-meta-justify, center);
 }
 
 /* Darkening overlay: only when the hero background is a photo (class added
