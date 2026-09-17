@@ -275,11 +275,11 @@ function ren_sanitize_options( $input ) {
 	$clean    = array();
 
 	// Branding.
-	$clean['accent_custom'] = isset( $input['accent_custom'] ) ? ( sanitize_hex_color( $input['accent_custom'] ) ?: $defaults['accent_custom'] ) : $defaults['accent_custom'];
+	$clean['accent_custom'] = isset( $input['accent_custom'] ) ? ( ren_sanitize_color( $input['accent_custom'] ) ?: $defaults['accent_custom'] ) : $defaults['accent_custom'];
 	$clean['logo_id']       = isset( $input['logo_id'] ) ? absint( $input['logo_id'] ) : 0;
 	$clean['logo_width']    = isset( $input['logo_width'] ) && $input['logo_width'] ? (string) min( 600, max( 20, absint( $input['logo_width'] ) ) ) : '160';
 	$clean['color_scheme']  = isset( $input['color_scheme'] ) && 'dark' === $input['color_scheme'] ? 'dark' : 'light';
-	$clean['accent_hover']  = isset( $input['accent_hover'] ) && '' !== $input['accent_hover'] ? ( sanitize_hex_color( $input['accent_hover'] ) ?: '' ) : '';
+	$clean['accent_hover']  = isset( $input['accent_hover'] ) && '' !== $input['accent_hover'] ? ( ren_sanitize_color( $input['accent_hover'] ) ?: '' ) : '';
 
 	// Header — logo spacing (px) + nav font.
 	$clean['logo_margin_top']    = isset( $input['logo_margin_top'] ) ? (string) min( 100, max( 0, absint( $input['logo_margin_top'] ) ) ) : '16';
@@ -307,7 +307,7 @@ function ren_sanitize_options( $input ) {
 
 	// Element colors — blank stays blank (means "automatic").
 	foreach ( array( 'color_heading', 'color_body', 'color_link', 'color_link_hover', 'color_post_hero', 'color_more_articles_bg', 'color_table_header_bg', 'color_table_header_text', 'color_table_row_1', 'color_table_row_2' ) as $key ) {
-		$clean[ $key ] = isset( $input[ $key ] ) && '' !== $input[ $key ] ? ( sanitize_hex_color( $input[ $key ] ) ?: '' ) : '';
+		$clean[ $key ] = isset( $input[ $key ] ) && '' !== $input[ $key ] ? ( ren_sanitize_color( $input[ $key ] ) ?: '' ) : '';
 	}
 
 	// Typography.
@@ -381,6 +381,40 @@ function ren_sanitize_options( $input ) {
  */
 function ren_sanitize_custom_css( $css ) {
 	return trim( str_ireplace( '</style>', '', wp_strip_all_tags( $css ) ) );
+}
+
+/**
+ * Sanitize a color value that may include an alpha/transparency channel —
+ * every .ren-color-picker field across the theme (Theme Options and the
+ * per-post Hero meta box alike) has wp-color-picker-alpha attached, which
+ * lets the picker return either plain "#rrggbb" (unchanged, same as
+ * before) or "rgba(r, g, b, a)" once transparency is actually used.
+ * WordPress core's own sanitize_hex_color() rejects anything that isn't
+ * strict 6/3-digit hex — it would silently null out any rgba() value a
+ * user picks, always falling back to the default color instead of saving
+ * what was actually chosen. This accepts hex (3/4/6/8-digit) and
+ * rgb()/rgba()/hsl()/hsla() alike, and rejects anything else, the same
+ * way sanitize_hex_color() rejects non-hex input.
+ *
+ * @param string $value Raw value from $_POST.
+ * @return string Sanitized color, or '' if it didn't look like a color at all.
+ */
+function ren_sanitize_color( $value ) {
+	$value = trim( (string) $value );
+
+	if ( '' === $value ) {
+		return '';
+	}
+
+	if ( preg_match( '/^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/', $value ) ) {
+		return $value;
+	}
+
+	if ( preg_match( '/^(rgb|hsl)a?\([\d.%,\s]+\)$/i', $value ) ) {
+		return $value;
+	}
+
+	return '';
 }
 
 /**
@@ -1121,6 +1155,19 @@ function ren_admin_assets( $hook ) {
 	wp_enqueue_style( 'wp-color-picker' );
 	wp_enqueue_script( 'wp-color-picker' );
 
+	// Adds an alpha/transparency slider to every .ren-color-picker field —
+	// see assets/js/admin-options.js for how it's actually turned on
+	// per-field. Must load after wp-color-picker (it patches the widget
+	// wp-color-picker registers) and before admin-options.js (which is
+	// what actually calls .wpColorPicker() on the page's fields).
+	wp_enqueue_script(
+		'ren-wp-color-picker-alpha',
+		REN_URI . '/assets/js/wp-color-picker-alpha.js',
+		array( 'wp-color-picker' ),
+		'3.0.4',
+		true
+	);
+
 	wp_enqueue_style(
 		'ren-admin-options',
 		REN_URI . '/assets/css/admin-options.css',
@@ -1131,7 +1178,7 @@ function ren_admin_assets( $hook ) {
 	wp_enqueue_script(
 		'ren-admin-options',
 		REN_URI . '/assets/js/admin-options.js',
-		array( 'jquery', 'wp-color-picker' ),
+		array( 'jquery', 'wp-color-picker', 'ren-wp-color-picker-alpha' ),
 		REN_VERSION,
 		true
 	);
