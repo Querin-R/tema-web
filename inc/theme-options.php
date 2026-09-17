@@ -21,26 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'REN_OPTIONS_KEY', 'ren_theme_options' );
 
 /**
- * Curated accent color choices, matching the brief's three options.
- * A "Custom" entry unlocks the color picker for any other value.
- */
-function ren_accent_choices() {
-	return array(
-		'#b026ff' => 'Electric Violet',
-		'#baff29' => 'Acid Green',
-		'#ff5470' => 'Hot Coral',
-		'custom'  => 'Custom…',
-	);
-}
-
-/**
  * Default option values.
  */
 function ren_default_options() {
 	return array(
 		// Branding.
-		'accent_preset'  => '#b026ff',
-		'accent_custom'  => '#b026ff',
+		'accent_custom'  => '#ad1686',
 		'accent_hover'   => '',
 		'logo_id'        => 0,
 		'logo_width'     => '160',
@@ -289,7 +275,6 @@ function ren_sanitize_options( $input ) {
 	$clean    = array();
 
 	// Branding.
-	$clean['accent_preset'] = isset( $input['accent_preset'] ) ? sanitize_text_field( $input['accent_preset'] ) : $defaults['accent_preset'];
 	$clean['accent_custom'] = isset( $input['accent_custom'] ) ? ( sanitize_hex_color( $input['accent_custom'] ) ?: $defaults['accent_custom'] ) : $defaults['accent_custom'];
 	$clean['logo_id']       = isset( $input['logo_id'] ) ? absint( $input['logo_id'] ) : 0;
 	$clean['logo_width']    = isset( $input['logo_width'] ) && $input['logo_width'] ? (string) min( 600, max( 20, absint( $input['logo_width'] ) ) ) : '160';
@@ -804,7 +789,7 @@ function ren_field_color_scheme() {
 		<input type="radio" name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[color_scheme]" value="light" <?php checked( $scheme, 'light' ); ?> />
 		<?php esc_html_e( 'Light (white background)', 'ren' ); ?>
 	</label>
-	<p class="description"><?php esc_html_e( 'Heads up: Acid Green as an accent has weak contrast for small text on a light background — Electric Violet or Hot Coral read better in Light mode.', 'ren' ); ?></p>
+	<p class="description"><?php esc_html_e( 'Heads up: a very light or very saturated accent color can have weak contrast for small text on a light background — check readability after changing it.', 'ren' ); ?></p>
 	<?php
 }
 
@@ -820,23 +805,11 @@ function ren_field_logo_width() {
 	);
 }
 
-/** Field: accent color (preset radio + custom color picker). */
+/** Field: accent color (custom color picker only — the three curated presets this used to offer alongside it were removed). */
 function ren_field_accent() {
 	$options = ren_get_options();
-	foreach ( ren_accent_choices() as $value => $label ) :
-		?>
-		<label style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;">
-			<input type="radio" name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[accent_preset]" value="<?php echo esc_attr( $value ); ?>" <?php checked( $options['accent_preset'], $value ); ?> />
-			<?php if ( 'custom' !== $value ) : ?>
-				<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:<?php echo esc_attr( $value ); ?>;border:1px solid #444;"></span>
-			<?php endif; ?>
-			<?php echo esc_html( $label ); ?>
-		</label>
-	<?php endforeach; ?>
-	<div style="margin-top:10px;">
-		<input type="text" class="ren-color-picker" name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[accent_custom]" value="<?php echo esc_attr( $options['accent_custom'] ); ?>" />
-		<p class="description"><?php esc_html_e( 'Used only when "Custom…" is selected above.', 'ren' ); ?></p>
-	</div>
+	?>
+	<input type="text" class="ren-color-picker" name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[accent_custom]" value="<?php echo esc_attr( $options['accent_custom'] ); ?>" />
 	<?php
 }
 
@@ -1166,16 +1139,15 @@ function ren_admin_assets( $hook ) {
 add_action( 'admin_enqueue_scripts', 'ren_admin_assets' );
 
 /**
- * Resolve the effective accent color (preset or custom).
+ * Resolve the effective accent color. Used to be preset-or-custom; now
+ * there's only the custom color, kept as its own function so every call
+ * site that reads "the accent color" didn't need to change along with it.
  *
  * @return string Hex color.
  */
 function ren_get_effective_accent() {
 	$options = ren_get_options();
-	if ( 'custom' === $options['accent_preset'] ) {
-		return $options['accent_custom'] ? $options['accent_custom'] : '#b026ff';
-	}
-	return $options['accent_preset'];
+	return $options['accent_custom'] ? $options['accent_custom'] : '#ad1686';
 }
 
 /**
