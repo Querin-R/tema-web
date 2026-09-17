@@ -5,15 +5,20 @@
 
 		// Color picker (same convention as Theme Options: data-allow-empty
 		// fields may have no value, meaning "fall back to the site-wide
-		// Theme Options color").
+		// Theme Options color"). Alpha channel enabled the same way too —
+		// see assets/js/admin-options.js for the full explanation of these
+		// two attributes.
 		$( '.ren-color-picker' ).each( function () {
 			var $input = $( this );
 			var allowEmpty = $input.data( 'allow-empty' );
+			$input.attr( 'data-alpha-enabled', 'true' );
+			$input.attr( 'data-alpha-color-type', 'hex' );
 			$input.wpColorPicker( {
+				type: 'full',
 				defaultColor: allowEmpty ? '#000000' : false,
 				change: function ( event, ui ) {
 					if ( allowEmpty ) {
-						$input.val( ui.color.toString() );
+						$input.val( ui.color.to_s( 'hex' ) );
 					}
 				},
 			} );
