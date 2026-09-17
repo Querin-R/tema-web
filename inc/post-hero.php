@@ -56,7 +56,7 @@ function ren_register_post_hero_meta() {
 				'type'              => 'string',
 				'single'            => true,
 				'show_in_rest'      => true,
-				'sanitize_callback' => 'sanitize_hex_color',
+				'sanitize_callback' => 'ren_sanitize_color',
 				'auth_callback'     => function () {
 					return current_user_can( 'edit_posts' );
 				},
@@ -198,7 +198,7 @@ function ren_save_post_hero_meta( $post_id ) {
 	}
 
 	if ( isset( $_POST['ren_hero_bg_color'] ) ) {
-		$color = sanitize_hex_color( wp_unslash( $_POST['ren_hero_bg_color'] ) );
+		$color = ren_sanitize_color( wp_unslash( $_POST['ren_hero_bg_color'] ) );
 		update_post_meta( $post_id, 'ren_hero_bg_color', $color ? $color : '' );
 	}
 
@@ -341,10 +341,20 @@ function ren_post_hero_admin_assets( $hook ) {
 	wp_enqueue_style( 'wp-color-picker' );
 	wp_enqueue_script( 'wp-color-picker' );
 
+	// Same alpha-enabled color picker used on the Theme Options page
+	// (inc/theme-options.php) — see assets/js/wp-color-picker-alpha.js.
+	wp_enqueue_script(
+		'ren-wp-color-picker-alpha',
+		REN_URI . '/assets/js/wp-color-picker-alpha.js',
+		array( 'wp-color-picker' ),
+		'3.0.4',
+		true
+	);
+
 	wp_enqueue_script(
 		'ren-admin-post-hero',
 		REN_URI . '/assets/js/admin-post-hero.js',
-		array( 'jquery', 'wp-color-picker' ),
+		array( 'jquery', 'wp-color-picker', 'ren-wp-color-picker-alpha' ),
 		REN_VERSION,
 		true
 	);
