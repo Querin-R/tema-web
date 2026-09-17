@@ -51,11 +51,25 @@
 		$( '.ren-color-picker' ).each( function () {
 			var $input = $( this );
 			var allowEmpty = $input.data( 'allow-empty' );
+			// wp-color-picker-alpha (assets/js/wp-color-picker-alpha.js,
+			// enqueued right before this file) reads these two as HTML
+			// data-* attributes, not as options passed to .wpColorPicker()
+			// below — that's a separate options object it happens to also
+			// read from, but alphaEnabled/alphaColorType specifically only
+			// come from the element itself. alphaColorType:'hex' keeps
+			// output as plain "#rrggbb" for a fully opaque color and only
+			// switches to "rgba(...)" when the alpha slider is actually
+			// used — so every existing saved color keeps its familiar
+			// format, and only a field where transparency is deliberately
+			// picked changes shape at all.
+			$input.attr( 'data-alpha-enabled', 'true' );
+			$input.attr( 'data-alpha-color-type', 'hex' );
 			$input.wpColorPicker( {
+				type: 'full',
 				defaultColor: allowEmpty ? '#000000' : false,
 				change: function ( event, ui ) {
 					if ( allowEmpty ) {
-						$input.val( ui.color.toString() );
+						$input.val( ui.color.to_s( 'hex' ) );
 					}
 				},
 			} );
