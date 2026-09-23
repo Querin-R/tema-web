@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.67.0
+Version: 2.68.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -110,6 +110,39 @@ Use it to make something cool, have fun, and share what you've learned with othe
 }
 .ren-category-badge a:hover {
 	opacity: 0.85;
+}
+
+/* Category filter bar (blog listing + category archives): "Tutti" plus
+   one pill per category with at least one post. Outlined by default so
+   it reads as a control, filled with the accent color for whichever
+   one is currently selected. */
+.ren-category-filter {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	margin: 1.5rem 0 2rem;
+}
+.ren-category-filter__link {
+	display: inline-block;
+	padding: 0.35em 0.9em;
+	border: 1px solid var(--wp--preset--color--accent);
+	border-radius: 999px;
+	color: var(--wp--preset--color--accent);
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+.ren-category-filter__link:hover {
+	opacity: 0.85;
+}
+.ren-category-filter__link.is-active {
+	background: var(--wp--preset--color--accent);
+	color: #ffffff;
+}
+
+/* "12–23 di 47 articoli" line under the filter bar. */
+.ren-archive-count {
+	margin: 0 0 1.5rem;
 }
 
 /* Optimized reading typography for the single post body. */
