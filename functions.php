@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REN_VERSION', '2.67.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
+define( 'REN_VERSION', '2.68.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
 define( 'REN_DIR', get_template_directory() );
 define( 'REN_URI', get_template_directory_uri() );
 
@@ -217,6 +217,7 @@ require_once REN_DIR . '/inc/default-featured-image.php';
 require_once REN_DIR . '/inc/more-articles.php';
 require_once REN_DIR . '/inc/archive-title.php';
 require_once REN_DIR . '/inc/archive-intro.php';
+require_once REN_DIR . '/inc/archive-filter.php';
 require_once REN_DIR . '/inc/theme-options.php';
 require_once REN_DIR . '/inc/fonts.php';
 require_once REN_DIR . '/inc/custom-css-js.php';
