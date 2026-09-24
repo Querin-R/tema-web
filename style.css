@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.70.4
+Version: 2.71.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -1588,4 +1588,150 @@ body.ren-hero .ren-home-content > .ren-home-section:first-child {
 
 .ren-home-closing p {
 	margin-bottom: 0.75rem;
+}
+
+/* ── Fascia a tutta larghezza + Home v2 (v2.71.0) ─────────── */
+/* Group style "Fascia a tutta larghezza" (inc/block-bands.php): the
+   background is painted outside the box with border-image outset, which is
+   ink overflow — it reaches both window edges without ever creating a
+   horizontal scrollbar. --ren-band is injected from the block's own color. */
+.is-style-ren-band {
+	border-image: var(--ren-band, none) fill 0 / 0 / 0 100vmax;
+	padding-block: clamp(3rem, 7vw, 6rem) !important;
+}
+
+.is-style-ren-band + .ren-home-section,
+.ren-home-section + .is-style-ren-band,
+.is-style-ren-band + .is-style-ren-band {
+	border-top: 0 !important;
+}
+
+.is-style-ren-band.has-text-color .ren-section-label,
+.is-style-ren-band.has-text-color .ren-more-link a,
+.is-style-ren-band.has-text-color .ren-stat-number,
+.is-style-ren-band.has-text-color .ren-timeline-period {
+	color: inherit;
+}
+
+.is-style-ren-band.has-text-color .ren-section-label {
+	opacity: 0.7;
+}
+
+.ren-home-content > .is-style-ren-band:last-child {
+	margin-bottom: calc(-1 * var(--wp--custom--spacing--section-gap));
+}
+
+/* Hero con ritratto (pagine): testo a sinistra, ritratto a destra,
+   appoggiato al bordo inferiore della fascia. */
+body.ren-hero-portrait .ren-post-header {
+	padding-bottom: 0;
+	justify-content: flex-end;
+	text-align: left;
+}
+
+.ren-hero-split {
+	display: grid;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+	gap: 2rem 3rem;
+	align-items: end;
+}
+
+.ren-hero-split__text {
+	align-self: center;
+	padding-block: 2rem;
+}
+
+.ren-hero-split__media {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+}
+
+.ren-hero-split__img {
+	display: block;
+	width: auto;
+	max-width: 100%;
+	max-height: min(620px, 75vh);
+	height: auto;
+}
+
+@media (max-width: 780px) {
+	.ren-hero-split {
+		grid-template-columns: 1fr;
+	}
+
+	.ren-hero-split__text {
+		padding-block: 1rem 0;
+	}
+
+	.ren-hero-split__img {
+		max-height: 420px;
+	}
+}
+
+/* Titoli di sezione a due livelli (etichetta + titolo grande). */
+.ren-section-title {
+	margin-top: 0.5rem;
+	margin-bottom: 2.5rem;
+	max-width: 24ch;
+}
+
+.ren-home-section-head .ren-section-title {
+	margin-bottom: 0;
+}
+
+/* Di cosa mi occupo + numeri. */
+.ren-skills-grid h3 {
+	margin-top: 0;
+	margin-bottom: 0.75rem;
+}
+
+.ren-stats {
+	margin-top: clamp(2.5rem, 5vw, 4rem);
+	padding-top: 2rem;
+	border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+
+.ren-stat-number {
+	margin: 0;
+	font-size: clamp(2.5rem, 6vw, 4.5rem);
+	font-weight: 700;
+	line-height: 1;
+	color: var(--wp--preset--color--accent);
+}
+
+.ren-stat-label {
+	margin: 0.5rem 0 0;
+	font-size: var(--wp--preset--font-size--small);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+/* Percorso. */
+.ren-timeline-item {
+	margin: 0 !important;
+	padding-block: 1.75rem;
+	border-top: 1px solid var(--wp--preset--color--border);
+}
+
+.ren-timeline-item:last-child {
+	border-bottom: 1px solid var(--wp--preset--color--border);
+}
+
+.ren-timeline-item h3 {
+	margin: 0 0 0.5rem;
+}
+
+.ren-timeline-item p {
+	margin: 0;
+}
+
+.ren-timeline-period {
+	font-weight: 700;
+	color: var(--wp--preset--color--accent);
+}
+
+/* Chiusura su fondo scuro. */
+.ren-home-closing.has-text-color .ren-email {
+	color: inherit;
 }
