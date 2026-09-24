@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** Allowed markup in the lead text. */
 function ren_page_heading_lead_kses() {
 	return array(
-		'a'      => array( 'href' => true, 'target' => true, 'rel' => true ),
+		'a'      => array( 'href' => true, 'target' => true, 'rel' => true, 'class' => true ),
 		'strong' => array(),
 		'em'     => array(),
 		'br'     => array(),
