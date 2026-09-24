@@ -171,6 +171,9 @@ function ren_render_post_hero_meta_box( $post ) {
 
 	<p class="description"><?php esc_html_e( 'Se non imposti nulla qui, la fascia hero usa il colore impostato in Opzioni Tema → Colori → Post Hero Background.', 'ren' ); ?></p>
 	<?php
+	if ( 'page' === $post->post_type && function_exists( 'ren_render_page_heading_fields' ) ) {
+		ren_render_page_heading_fields( $post );
+	}
 }
 
 /**
@@ -208,6 +211,10 @@ function ren_save_post_hero_meta( $post_id ) {
 
 	if ( isset( $_POST['ren_hero_bg_image'] ) ) {
 		update_post_meta( $post_id, 'ren_hero_bg_image', absint( $_POST['ren_hero_bg_image'] ) );
+	}
+
+	if ( 'page' === get_post_type( $post_id ) && function_exists( 'ren_save_page_heading_fields' ) ) {
+		ren_save_page_heading_fields( $post_id );
 	}
 }
 add_action( 'save_post_post', 'ren_save_post_hero_meta' );
