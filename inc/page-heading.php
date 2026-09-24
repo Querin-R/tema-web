@@ -24,6 +24,18 @@ function ren_page_heading_lead_kses() {
 }
 
 function ren_register_page_heading_meta() {
+	register_post_meta(
+		'page',
+		'ren_hero_portrait',
+		array(
+			'type'          => 'integer',
+			'single'        => true,
+			'show_in_rest'  => true,
+			'auth_callback' => function () {
+				return current_user_can( 'edit_pages' );
+			},
+		)
+	);
 	foreach ( array( 'ren_hero_kicker', 'ren_hero_title', 'ren_hero_lead' ) as $key ) {
 		register_post_meta(
 			'page',
@@ -69,6 +81,42 @@ function ren_render_page_heading_fields( $post ) {
 		<span class="description"><?php esc_html_e( 'Ammessi link, grassetto e corsivo (HTML).', 'ren' ); ?></span>
 	</p>
 	<?php
+	$portrait = (int) get_post_meta( $post->ID, 'ren_hero_portrait', true );
+	$src      = $portrait ? wp_get_attachment_image_url( $portrait, 'medium' ) : '';
+	?>
+	<p>
+		<label><?php esc_html_e( 'Ritratto sopra la fascia hero', 'ren' ); ?></label><br />
+		<span class="description"><?php esc_html_e( 'Compare a destra del titolo, appoggiato al bordo inferiore della fascia. Ideale un PNG scontornato, verticale.', 'ren' ); ?></span>
+	</p>
+	<input type="hidden" id="ren_hero_portrait" name="ren_hero_portrait" value="<?php echo esc_attr( $portrait ? $portrait : '' ); ?>" />
+	<div id="ren-hero-portrait-preview"><?php echo $src ? '<img src="' . esc_url( $src ) . '" style="max-width:100%;height:auto;display:block;margin-bottom:0.5rem;" />' : ''; ?></div>
+	<p>
+		<button type="button" class="button" id="ren-hero-portrait-upload"><?php esc_html_e( 'Scegli ritratto', 'ren' ); ?></button>
+		<button type="button" class="button-link" id="ren-hero-portrait-remove"><?php esc_html_e( 'Rimuovi', 'ren' ); ?></button>
+	</p>
+	<script>
+	( function () {
+		var frame, field = document.getElementById( 'ren_hero_portrait' ), preview = document.getElementById( 'ren-hero-portrait-preview' );
+		document.getElementById( 'ren-hero-portrait-upload' ).addEventListener( 'click', function ( e ) {
+			e.preventDefault();
+			if ( ! frame ) {
+				frame = wp.media( { title: 'Scegli ritratto', button: { text: 'Usa questa immagine' }, multiple: false, library: { type: 'image' } } );
+				frame.on( 'select', function () {
+					var a = frame.state().get( 'selection' ).first().toJSON();
+					field.value = a.id;
+					preview.innerHTML = '<img src="' + ( a.sizes && a.sizes.medium ? a.sizes.medium.url : a.url ) + '" style="max-width:100%;height:auto;display:block;margin-bottom:0.5rem;" />';
+				} );
+			}
+			frame.open();
+		} );
+		document.getElementById( 'ren-hero-portrait-remove' ).addEventListener( 'click', function ( e ) {
+			e.preventDefault();
+			field.value = '';
+			preview.innerHTML = '';
+		} );
+	} )();
+	</script>
+	<?php
 }
 
 /**
@@ -84,6 +132,14 @@ function ren_save_page_heading_fields( $post_id ) {
 	}
 	if ( isset( $_POST['ren_hero_lead'] ) ) {
 		update_post_meta( $post_id, 'ren_hero_lead', wp_kses( wp_unslash( $_POST['ren_hero_lead'] ), ren_page_heading_lead_kses() ) );
+	}
+	if ( isset( $_POST['ren_hero_portrait'] ) ) {
+		$portrait = absint( $_POST['ren_hero_portrait'] );
+		if ( $portrait ) {
+			update_post_meta( $post_id, 'ren_hero_portrait', $portrait );
+		} else {
+			delete_post_meta( $post_id, 'ren_hero_portrait' );
+		}
 	}
 	// phpcs:enable
 }
@@ -113,6 +169,38 @@ function ren_shortcode_page_heading() {
 		$html .= '<div class="ren-hero-lead">' . $lead . '</div>';
 	}
 
+	$portrait = ren_page_hero_portrait_id( $post_id );
+	if ( $portrait ) {
+		$img  = wp_get_attachment_image( $portrait, 'large', false, array( 'class' => 'ren-hero-split__img', 'loading' => 'eager', 'fetchpriority' => 'high' ) );
+		$html = '<div class="ren-hero-split"><div class="ren-hero-split__text">' . $html . '</div><div class="ren-hero-split__media">' . $img . '</div></div>';
+	}
+
 	return str_replace( array( "\r", "\n" ), '', $html );
 }
 add_shortcode( 'ren_page_heading', 'ren_shortcode_page_heading' );
+
+/**
+ * Portrait ID, only when the hero band is active on that page.
+ *
+ * @param int $post_id Page ID.
+ */
+function ren_page_hero_portrait_id( $post_id ) {
+	if ( 'page' !== get_post_type( $post_id ) || ! get_post_meta( $post_id, 'ren_hero_enabled', true ) ) {
+		return 0;
+	}
+	$id = (int) get_post_meta( $post_id, 'ren_hero_portrait', true );
+	return ( $id && wp_attachment_is_image( $id ) ) ? $id : 0;
+}
+
+/**
+ * Body class for the split hero layout.
+ *
+ * @param string[] $classes Body classes.
+ */
+function ren_page_hero_portrait_body_class( $classes ) {
+	if ( is_page() && ren_page_hero_portrait_id( get_queried_object_id() ) ) {
+		$classes[] = 'ren-hero-portrait';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'ren_page_hero_portrait_body_class' );
