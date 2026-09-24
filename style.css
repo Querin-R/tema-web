@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.71.0
+Version: 2.72.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -1497,13 +1497,18 @@ body.ren-hero .ren-post-header.ren-archive-header {
 
 body.ren-hero .ren-page-title {
 	margin-bottom: 0;
-	max-width: 22ch;
 }
 
-body.ren-post-align-center .ren-page-title,
+/* The heading sits in a constrained-layout group, which gives any child
+   with a max-width automatic side margins (i.e. centers it). Pin it to the
+   left unless the page's title alignment is center. */
+.ren-hero-lead {
+	margin-left: 0 !important;
+	margin-right: auto !important;
+}
+
 body.ren-post-align-center .ren-hero-lead {
-	margin-left: auto;
-	margin-right: auto;
+	margin-left: auto !important;
 }
 
 .ren-hero-lead {
@@ -1674,6 +1679,9 @@ body.ren-hero-portrait .ren-post-header {
 	margin-top: 0.5rem;
 	margin-bottom: 2.5rem;
 	max-width: 24ch;
+	/* Same constrained-layout centering issue: keep it aligned with the label. */
+	margin-left: 0 !important;
+	margin-right: auto !important;
 }
 
 .ren-home-section-head .ren-section-title {
@@ -1734,4 +1742,84 @@ body.ren-hero-portrait .ren-post-header {
 /* Chiusura su fondo scuro. */
 .ren-home-closing.has-text-color .ren-email {
 	color: inherit;
+}
+
+
+/* ── Pulsanti .ren-btn (v2.72.0) ──────────────────────────────
+   Uso su qualsiasi link:
+     <a class="ren-btn ren-btn--fill" href="…">Testo</a>   pieno
+     <a class="ren-btn ren-btn--text" href="…">Testo</a>   solo testo
+   Nel blocco Pulsante: barra laterale → Stili → "Pieno con freccia" /
+   "Testo con freccia". Il colore del pulsante pieno si cambia con
+   --ren-btn-bg / --ren-btn-color, oppure dal pannello Colore del blocco. */
+.ren-btn,
+.wp-block-button.is-style-ren-fill .wp-block-button__link,
+.wp-block-button.is-style-ren-text .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.75rem;
+	font-size: 0.9rem;
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	text-decoration: none !important;
+	border: 0 !important;
+	border-radius: 0;
+	transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.ren-btn::after,
+.wp-block-button.is-style-ren-fill .wp-block-button__link::after,
+.wp-block-button.is-style-ren-text .wp-block-button__link::after {
+	content: "";
+	width: 0.8em;
+	height: 0.8em;
+	flex: none;
+	background-color: currentColor;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 12 12 4M5.5 4H12v6.5' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 12 12 4M5.5 4H12v6.5' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") center / contain no-repeat;
+	transition: transform 0.2s ease;
+}
+
+.ren-btn:hover::after,
+.wp-block-button.is-style-ren-fill .wp-block-button__link:hover::after,
+.wp-block-button.is-style-ren-text .wp-block-button__link:hover::after {
+	transform: translate(2px, -2px);
+}
+
+.ren-btn--fill,
+.wp-block-button.is-style-ren-fill .wp-block-button__link:not(.has-background) {
+	padding: 1.35rem 2rem;
+	background-color: var(--ren-btn-bg, var(--wp--preset--color--accent));
+	color: var(--ren-btn-color, #fff) !important;
+}
+
+.wp-block-button.is-style-ren-fill .wp-block-button__link {
+	padding: 1.35rem 2rem;
+}
+
+.ren-btn--fill:hover,
+.wp-block-button.is-style-ren-fill .wp-block-button__link:hover {
+	background-color: var(--ren-btn-bg-hover, var(--wp--preset--color--foreground));
+	color: var(--ren-btn-color, #fff) !important;
+}
+
+.ren-btn--text,
+.wp-block-button.is-style-ren-text .wp-block-button__link {
+	padding: 1.35rem 0.25rem;
+	background: none !important;
+	color: inherit;
+}
+
+.ren-btn--text:hover,
+.wp-block-button.is-style-ren-text .wp-block-button__link:hover {
+	opacity: 0.7;
+}
+
+/* Nella fascia hero i link del sottotitolo hanno una sottolineatura:
+   i pulsanti non la vogliono. */
+.ren-hero-lead a.ren-btn {
+	border-bottom: 0;
+	margin: 1rem 1.5rem 0 0;
 }
