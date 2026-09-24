@@ -89,12 +89,9 @@ function ren_reading_time( $post_id = null ) {
  * static markup and can't run raw PHP for a dynamic year.
  */
 function ren_copyright_shortcode() {
-	return sprintf(
-		/* translators: 1: current year, 2: site name */
-		esc_html__( '© %1$s %2$s — All rights reserved.', 'ren' ),
-		esc_html( gmdate( 'Y' ) ),
-		esc_html( get_bloginfo( 'name' ) )
-	);
+	$options = function_exists( 'ren_get_options' ) ? ren_get_options() : array();
+	$holder  = ! empty( $options['footer_copyright'] ) ? $options['footer_copyright'] : get_bloginfo( 'name' );
+	return '<span class="ren-copyright">&copy; ' . esc_html( gmdate( 'Y' ) ) . ' ' . esc_html( $holder ) . '</span>';
 }
 add_shortcode( 'ren_copyright', 'ren_copyright_shortcode' );
 
