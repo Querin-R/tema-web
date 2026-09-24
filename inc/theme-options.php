@@ -119,6 +119,13 @@ function ren_default_options() {
 		'social_twitter'   => '',
 		'social_linkedin'  => '',
 		'social_github'    => '',
+
+		// Footer.
+		'footer_tagline'    => 'Grafica, esperienza e appunti sul mestiere.',
+		'footer_email'      => '',
+		'footer_links'      => '',
+		'footer_copyright'  => 'René Querin / Q-design',
+		'footer_cookie_url' => '',
 	);
 }
 
@@ -261,6 +268,21 @@ function ren_register_settings() {
 		'ren-tab-social'
 	);
 	add_settings_field( 'ren_social', __( 'Profiles', 'ren' ), 'ren_field_social_links', 'ren-tab-social', 'ren_social_section' );
+
+	// ── Footer ────────────────────────────────────────────────
+	add_settings_section(
+		'ren_footer_section',
+		'',
+		function () {
+			echo '<p>' . esc_html__( 'Contenuti del footer e della pagina Contatti. Il menu del footer si sceglie in Aspetto → Editor → Parti del template → Footer.', 'ren' ) . '</p>';
+		},
+		'ren-tab-footer'
+	);
+	add_settings_field( 'ren_footer_tagline', __( 'Tagline', 'ren' ), 'ren_field_footer_tagline', 'ren-tab-footer', 'ren_footer_section' );
+	add_settings_field( 'ren_footer_email', __( 'Email', 'ren' ), 'ren_field_footer_email', 'ren-tab-footer', 'ren_footer_section' );
+	add_settings_field( 'ren_footer_links', __( 'Link aggiuntivi', 'ren' ), 'ren_field_footer_links', 'ren-tab-footer', 'ren_footer_section' );
+	add_settings_field( 'ren_footer_copyright', __( 'Copyright', 'ren' ), 'ren_field_footer_copyright', 'ren-tab-footer', 'ren_footer_section' );
+	add_settings_field( 'ren_footer_cookie_url', __( 'Cookie policy URL', 'ren' ), 'ren_field_footer_cookie_url', 'ren-tab-footer', 'ren_footer_section' );
 }
 add_action( 'admin_init', 'ren_register_settings' );
 
@@ -373,7 +395,35 @@ function ren_sanitize_options( $input ) {
 		$clean[ $key ]  = isset( $input[ $key ] ) ? esc_url_raw( $input[ $key ] ) : '';
 	}
 
+	// Footer.
+	$clean['footer_tagline']    = isset( $input['footer_tagline'] ) ? sanitize_text_field( $input['footer_tagline'] ) : $defaults['footer_tagline'];
+	$clean['footer_email']      = isset( $input['footer_email'] ) ? sanitize_email( $input['footer_email'] ) : '';
+	$clean['footer_links']      = isset( $input['footer_links'] ) ? ren_sanitize_footer_links( $input['footer_links'] ) : '';
+	$clean['footer_copyright']  = isset( $input['footer_copyright'] ) ? sanitize_text_field( $input['footer_copyright'] ) : $defaults['footer_copyright'];
+	$clean['footer_cookie_url'] = isset( $input['footer_cookie_url'] ) ? esc_url_raw( $input['footer_cookie_url'] ) : '';
+
 	return $clean;
+}
+
+/**
+ * Footer links: one per line, "Etichetta | URL". Invalid lines are dropped.
+ *
+ * @param string $raw Raw textarea value.
+ * @return string Normalised lines.
+ */
+function ren_sanitize_footer_links( $raw ) {
+	$out = array();
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) $raw ) as $line ) {
+		$parts = array_map( 'trim', explode( '|', $line, 2 ) );
+		if ( 2 !== count( $parts ) || '' === $parts[0] ) {
+			continue;
+		}
+		$url = esc_url_raw( $parts[1] );
+		if ( $url ) {
+			$out[] = sanitize_text_field( $parts[0] ) . ' | ' . $url;
+		}
+	}
+	return implode( "\n", $out );
 }
 
 /**
@@ -1035,6 +1085,41 @@ function ren_field_social_links() {
 	}
 }
 
+/** Field: footer tagline. */
+function ren_field_footer_tagline() {
+	$options = ren_get_options();
+	printf( '<input type="text" name="%1$s[footer_tagline]" value="%2$s" style="width:420px;" />', esc_attr( REN_OPTIONS_KEY ), esc_attr( $options['footer_tagline'] ) );
+}
+
+/** Field: public email (footer + [ren_email]). */
+function ren_field_footer_email() {
+	$options = ren_get_options();
+	printf( '<input type="email" name="%1$s[footer_email]" value="%2$s" style="width:320px;" /><p class="description">%3$s</p>', esc_attr( REN_OPTIONS_KEY ), esc_attr( $options['footer_email'] ), esc_html__( 'Mostrata nel footer e nella pagina Contatti (shortcode [ren_email]), offuscata contro lo spam.', 'ren' ) );
+}
+
+/** Field: extra footer links. */
+function ren_field_footer_links() {
+	$options = ren_get_options();
+	printf(
+		'<textarea name="%1$s[footer_links]" rows="5" style="width:420px;font-family:monospace;" placeholder="Paissangroup | https://…">%2$s</textarea><p class="description">%3$s</p>',
+		esc_attr( REN_OPTIONS_KEY ),
+		esc_textarea( $options['footer_links'] ),
+		esc_html__( 'Un link per riga, nel formato: Etichetta | URL. I link esterni si aprono in una nuova scheda.', 'ren' )
+	);
+}
+
+/** Field: copyright holder. */
+function ren_field_footer_copyright() {
+	$options = ren_get_options();
+	printf( '<input type="text" name="%1$s[footer_copyright]" value="%2$s" style="width:320px;" /><p class="description">%3$s</p>', esc_attr( REN_OPTIONS_KEY ), esc_attr( $options['footer_copyright'] ), esc_html__( 'Il simbolo © e l\'anno corrente vengono aggiunti automaticamente.', 'ren' ) );
+}
+
+/** Field: cookie policy URL. */
+function ren_field_footer_cookie_url() {
+	$options = ren_get_options();
+	printf( '<input type="url" name="%1$s[footer_cookie_url]" value="%2$s" placeholder="https://…" style="width:420px;" /><p class="description">%3$s</p>', esc_attr( REN_OPTIONS_KEY ), esc_url( $options['footer_cookie_url'] ), esc_html__( 'Il link Privacy usa la pagina impostata in Impostazioni → Privacy. Vuoto = link Cookie nascosto.', 'ren' ) );
+}
+
 /**
  * Tabs shown on the options page: [ slug => [ label, icon (dashicon class) ] ].
  */
@@ -1047,6 +1132,7 @@ function ren_options_tabs() {
 		'blog'       => array( 'label' => __( 'Blog', 'ren' ), 'icon' => 'dashicons-admin-post' ),
 		'code'       => array( 'label' => __( 'CSS / JS', 'ren' ), 'icon' => 'dashicons-editor-code' ),
 		'social'     => array( 'label' => __( 'Social', 'ren' ), 'icon' => 'dashicons-share' ),
+		'footer'     => array( 'label' => __( 'Footer', 'ren' ), 'icon' => 'dashicons-arrow-down-alt' ),
 	);
 }
 
