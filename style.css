@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.69.0
+Version: 2.70.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -1480,4 +1480,112 @@ body.ren-hero .ren-post-header.ren-archive-header {
 	.ren-footer-top {
 		flex-direction: column;
 	}
+}
+
+/* ── Home + page heading (v2.70.0) ────────────────────────── */
+.ren-hero-kicker {
+	margin: 0 0 1rem;
+	font-size: var(--wp--preset--font-size--small);
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	opacity: 0.85;
+}
+
+.ren-page-title {
+	margin: 0 0 2rem;
+}
+
+body.ren-hero .ren-page-title {
+	margin-bottom: 0;
+	max-width: 22ch;
+}
+
+body.ren-post-align-center .ren-page-title,
+body.ren-post-align-center .ren-hero-lead {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.ren-hero-lead {
+	margin-top: 1.5rem;
+	max-width: 60ch;
+	font-size: var(--wp--preset--font-size--medium);
+	line-height: 1.6;
+}
+
+.ren-hero-lead a {
+	text-decoration: none;
+	border-bottom: 1px solid currentColor;
+	margin-right: 1.5rem;
+}
+
+/* Home: il contenuto della pagina usa tutta la larghezza di 1280px,
+   non la colonna di lettura del 70%. */
+.ren-home-hero-wrap .ren-post-header__inner {
+	width: 100%;
+}
+
+.ren-home-section {
+	padding-block: clamp(2.5rem, 6vw, 5rem);
+}
+
+.ren-home-section + .ren-home-section {
+	border-top: 1px solid var(--wp--preset--color--border);
+}
+
+body.ren-hero .ren-home-content > .ren-home-section:first-child {
+	padding-top: 0;
+}
+
+.ren-section-label {
+	margin: 0;
+	color: var(--wp--preset--color--accent);
+	font-size: var(--wp--preset--font-size--small);
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+}
+
+.ren-home-section-head {
+	margin-bottom: 2.5rem;
+}
+
+.ren-home-section-head h2 {
+	margin: 0;
+}
+
+.ren-more-link a {
+	text-decoration: none;
+	color: var(--wp--preset--color--foreground);
+	border-bottom: 1px solid var(--wp--preset--color--accent);
+	margin-right: 1.5rem;
+	transition: color 0.2s ease;
+}
+
+.ren-more-link a:hover {
+	color: var(--wp--preset--color--accent);
+}
+
+.ren-home-portrait .wp-block-media-text__media img {
+	aspect-ratio: 4 / 5;
+	object-fit: cover;
+	border-radius: 6px;
+}
+
+.ren-home-portrait .wp-block-media-text__content {
+	padding: 0 0 0 clamp(1.5rem, 5vw, 4rem);
+}
+
+@media (max-width: 600px) {
+	.ren-home-portrait .wp-block-media-text__content {
+		padding: 1.5rem 0 0;
+	}
+}
+
+.ren-home-closing .ren-email {
+	font-size: var(--wp--preset--font-size--large);
+	border-bottom: 1px solid var(--wp--preset--color--accent);
+}
+
+.ren-home-closing p {
+	margin-bottom: 0.75rem;
 }
