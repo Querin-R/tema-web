@@ -31,6 +31,29 @@ function ren_register_band_style() {
 add_action( 'init', 'ren_register_band_style' );
 
 /**
+ * Button styles matching the .ren-btn CSS classes (see style.css), so the
+ * same look is available both as a class on any link and from the Styles
+ * panel of the core Button block.
+ */
+function ren_register_button_styles() {
+	register_block_style(
+		'core/button',
+		array(
+			'name'  => 'ren-fill',
+			'label' => __( 'Pieno con freccia', 'ren' ),
+		)
+	);
+	register_block_style(
+		'core/button',
+		array(
+			'name'  => 'ren-text',
+			'label' => __( 'Testo con freccia', 'ren' ),
+		)
+	);
+}
+add_action( 'init', 'ren_register_button_styles' );
+
+/**
  * Background of a Group block as a CSS <image> (colors become a flat gradient).
  *
  * @param array $attrs Block attributes.
