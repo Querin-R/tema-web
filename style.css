@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.73.0
+Version: 2.74.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -1926,5 +1926,129 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 @media (max-width: 800px) {
 	body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-template > li:first-child .ren-blog-card {
 		grid-template-columns: 1fr;
+	}
+}
+
+
+/* ── Esperienza: competenze + timeline (v2.74.0) ─────────────── */
+.ren-exp-skill-title {
+	margin: 2.25rem 0 0.75rem;
+	font-size: var(--wp--preset--font-size--large);
+}
+
+.ren-exp-skills .ren-section-label + .ren-exp-skill-title {
+	margin-top: 1.5rem;
+}
+
+.ren-exp-skills p {
+	margin: 0 0 0.75rem;
+}
+
+/* Fissa durante lo scorrimento solo se entra nello schermo (JS). */
+.ren-exp-skills.is-sticky {
+	position: sticky;
+	top: 7rem;
+}
+
+/* Timeline: asse sottile, piccolo marker, date in evidenza. */
+.ren-tl {
+	--ren-tl-pad: 2.5rem;
+	--ren-tl-axis: 0.45rem;
+	position: relative;
+	margin-top: 1.5rem;
+	padding-left: var(--ren-tl-pad);
+}
+
+.ren-tl::before {
+	content: "";
+	position: absolute;
+	top: 0.5rem;
+	bottom: 0;
+	left: var(--ren-tl-axis);
+	width: 1px;
+	background: var(--wp--preset--color--border);
+}
+
+.ren-tl-item {
+	position: relative;
+	margin: 0 !important;
+	padding-bottom: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+.ren-tl-item:last-child {
+	padding-bottom: 0;
+}
+
+/* Marker */
+.ren-tl-item::before {
+	content: "";
+	position: absolute;
+	top: 0.55em;
+	left: calc(-1 * var(--ren-tl-pad) + var(--ren-tl-axis) - 5.5px);
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border: 2px solid var(--wp--preset--color--accent);
+	background: var(--wp--preset--color--background);
+	box-sizing: border-box;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	z-index: 1;
+}
+
+.ren-tl-item.is-active::before {
+	background: var(--wp--preset--color--accent);
+	transform: scale(1.25);
+}
+
+/* Tratto più presente per il periodo più recente (le prime due tappe). */
+.ren-tl-item:nth-child(-n+2)::after {
+	content: "";
+	position: absolute;
+	top: 0.8em;
+	bottom: 0;
+	left: calc(-1 * var(--ren-tl-pad) + var(--ren-tl-axis) - 1px);
+	width: 3px;
+	background: var(--wp--preset--color--accent);
+}
+
+.ren-tl-date {
+	margin: 0 0 0.35rem;
+	font-weight: 700;
+	line-height: 1.1;
+	font-size: 1.35rem;
+	transition: color 0.3s ease;
+}
+
+/* Progressione visiva: le date più recenti sono più grandi. */
+.ren-tl-item:nth-child(1) .ren-tl-date { font-size: clamp(1.9rem, 3.4vw, 2.6rem); }
+.ren-tl-item:nth-child(2) .ren-tl-date { font-size: clamp(1.7rem, 3vw, 2.2rem); }
+.ren-tl-item:nth-child(3) .ren-tl-date { font-size: clamp(1.55rem, 2.6vw, 1.9rem); }
+.ren-tl-item:nth-child(4) .ren-tl-date { font-size: clamp(1.45rem, 2.2vw, 1.65rem); }
+
+.ren-tl-item.is-active .ren-tl-date {
+	color: var(--wp--preset--color--accent);
+}
+
+.ren-tl-org {
+	margin: 0.5rem 0 0.15rem;
+	font-size: var(--wp--preset--font-size--small);
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.ren-tl-role {
+	margin: 0 0 0.6rem;
+	font-style: italic;
+	color: var(--wp--preset--color--muted);
+}
+
+.ren-tl-text {
+	margin: 0;
+	max-width: 60ch;
+}
+
+@media (max-width: 781px) {
+	.ren-exp-layout > .wp-block-column + .wp-block-column {
+		margin-top: 2.5rem;
 	}
 }
