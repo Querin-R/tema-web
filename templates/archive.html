@@ -15,14 +15,21 @@
 	</div>
 	<!-- /wp:group -->
 
-	<!-- wp:group {"className":"ren-content-left"} -->
-	<div class="wp-block-group ren-content-left">
+	<!-- wp:group {"className":"ren-archive-top","layout":{"type":"default"}} -->
+	<div class="wp-block-group ren-archive-top">
 		<!-- wp:shortcode -->
 		[ren_category_filter]
 		<!-- /wp:shortcode -->
-		<!-- wp:shortcode -->
-		[ren_archive_count]
-		<!-- /wp:shortcode -->
+		<!-- wp:group {"className":"ren-archive-toolbar","layout":{"type":"flex","justifyContent":"space-between","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+		<div class="wp-block-group ren-archive-toolbar">
+			<!-- wp:shortcode -->
+			[ren_archive_count]
+			<!-- /wp:shortcode -->
+			<!-- wp:shortcode -->
+			[ren_view_toggle]
+			<!-- /wp:shortcode -->
+		</div>
+		<!-- /wp:group -->
 	</div>
 	<!-- /wp:group -->
 
