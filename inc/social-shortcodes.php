@@ -64,7 +64,9 @@ function ren_social_icon( $slug, $size = 20 ) {
 /**
  * [ren_social_links] — renders the configured social profiles as an icon row.
  */
-function ren_shortcode_social_links() {
+function ren_shortcode_social_links( $atts = array() ) {
+	$atts  = shortcode_atts( array( 'labels' => '' ), $atts, 'ren_social_links' );
+	$with  = in_array( strtolower( (string) $atts['labels'] ), array( '1', 'true', 'yes', 'si', 'sì' ), true );
 	$links = ren_get_social_links();
 	if ( empty( $links ) ) {
 		return '';
@@ -79,7 +81,8 @@ function ren_shortcode_social_links() {
 		'github'    => 'GitHub',
 	);
 
-	$html = '<div class="ren-social-links">';
+	// [ren_social_links labels="1"] also prints the network name next to the icon.
+	$html = '<div class="ren-social-links' . ( $with ? ' ren-social-links--labels' : '' ) . '">';
 	foreach ( $links as $slug => $url ) {
 		$label = isset( $labels[ $slug ] ) ? $labels[ $slug ] : ucfirst( $slug );
 		$icon  = ren_social_icon( $slug, 18 );
@@ -88,7 +91,7 @@ function ren_shortcode_social_links() {
 			esc_url( $url ),
 			esc_attr( $label ),
 			esc_attr( $label ),
-			$icon
+			$icon . ( $with ? '<span class="ren-social-links__label">' . esc_html( $label ) . '</span>' : '' )
 		);
 	}
 	$html .= '</div>';
