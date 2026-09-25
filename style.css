@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.75.1
+Version: 2.76.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2182,4 +2182,28 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 
 .ren-article-body .ren-tools-intro .ren-section-title {
 	margin-top: 0.5rem;
+}
+
+
+/* ── Template "Pagina a tutta larghezza" (v2.76.0) ──────────────
+   templates/page-wide.html: stessa testata delle pagine, contenuto su
+   tutti i 1280px come la Home. Pensato per pagine composte da sezioni
+   (Esperienza, Chi sono). I paragrafi "sciolti", fuori dalle sezioni,
+   restano a una larghezza comoda da leggere. */
+.ren-wide-body > p,
+.ren-wide-body > ul,
+.ren-wide-body > ol,
+.ren-wide-body > h2,
+.ren-wide-body > h3,
+.ren-wide-body > blockquote {
+	max-width: 70ch;
+	margin-left: 0 !important;
+	margin-right: auto !important;
+}
+
+.ren-wide-body > p,
+.ren-wide-body > ul,
+.ren-wide-body > ol {
+	font-size: 1.1875rem;
+	line-height: 1.75;
 }
