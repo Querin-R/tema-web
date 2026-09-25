@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.75.0
+Version: 2.75.1
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2060,7 +2060,11 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 
 /* ── Strumenti: griglia numerata (v2.75.0) ────────────────────── */
 .ren-tools-intro {
-	max-width: 640px;
+	/* Tutta la larghezza della griglia sottostante. Il layout "constrained"
+	   di WordPress centrerebbe un figlio con max-width: lo evitiamo. */
+	max-width: none !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
 	margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
 }
 
@@ -2141,4 +2145,41 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 	.ren-tools-grid {
 		grid-template-columns: 1fr;
 	}
+}
+
+
+/* ── Sezioni dentro il contenuto delle pagine (v2.75.1) ──────────
+   Le pagine normali mettono il contenuto in .ren-article-body, che dà ai
+   titoli h2/h3 un margine superiore ampio pensato per gli articoli. Nelle
+   sezioni costruite con i pattern (Home, Esperienza, Strumenti…) i titoli
+   hanno già la loro spaziatura: la ripristiniamo. */
+.ren-article-body .ren-home-section h2,
+.ren-article-body .ren-home-section h3 {
+	margin-top: 0;
+}
+
+.ren-article-body .ren-section-title {
+	margin-top: 0.5rem;
+}
+
+.ren-article-body .ren-section-label + .ren-exp-skill-title {
+	margin-top: 1.5rem;
+}
+
+.ren-article-body .ren-exp-skill-title {
+	margin-top: 2.25rem;
+}
+
+.ren-article-body .ren-tl-org {
+	margin-top: 0.5rem;
+}
+
+.ren-article-body .ren-home-section > * + *,
+.ren-article-body .ren-tool-item > * + *,
+.ren-article-body .ren-tools-intro > * + * {
+	margin-top: 0;
+}
+
+.ren-article-body .ren-tools-intro .ren-section-title {
+	margin-top: 0.5rem;
 }
