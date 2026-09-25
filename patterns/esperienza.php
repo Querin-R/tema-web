@@ -89,14 +89,14 @@
 		<!-- wp:column {"width":"60%"} -->
 		<div class="wp-block-column" style="flex-basis:60%">
 			<!-- wp:paragraph {"className":"ren-section-label"} -->
-			<p class="ren-section-label">Percorso professionale</p>
+			<p class="ren-section-label">Il percorso professionale</p>
 			<!-- /wp:paragraph -->
 			<!-- wp:group {"className":"ren-tl","layout":{"type":"default"}} -->
 			<div class="wp-block-group ren-tl">
 				<!-- wp:group {"className":"ren-tl-item","layout":{"type":"default"}} -->
 				<div class="wp-block-group ren-tl-item">
 					<!-- wp:paragraph {"className":"ren-tl-date"} -->
-					<p class="ren-tl-date">2026 — oggi</p>
+					<p class="ren-tl-date">2013 — oggi</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"ren-tl-org"} -->
 					<h3 class="wp-block-heading ren-tl-org">Paissan &amp; Partners</h3>
@@ -105,23 +105,16 @@
 					<p class="ren-tl-role">Creative Director &amp; Partner</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"ren-tl-text"} -->
-					<p class="ren-tl-text">Il ruolo si amplia dalla progettazione alla direzione creativa e al coordinamento di collaboratori interni ed esterni. Oggi sono socio dell'ufficio.</p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-				<!-- wp:group {"className":"ren-tl-item","layout":{"type":"default"}} -->
-				<div class="wp-block-group ren-tl-item">
-					<!-- wp:paragraph {"className":"ren-tl-date"} -->
-					<p class="ren-tl-date">2013 — 2026</p>
-					<!-- /wp:paragraph -->
-					<!-- wp:heading {"level":3,"className":"ren-tl-org"} -->
-					<h3 class="wp-block-heading ren-tl-org">Paissan &amp; Partners</h3>
-					<!-- /wp:heading -->
-					<!-- wp:paragraph {"className":"ren-tl-role"} -->
-					<p class="ren-tl-role">Responsabile dell'area grafica</p>
+					<p class="ren-tl-text">Nel 2013 entro in Paissan &amp; Partners, inizialmente come responsabile dell'area grafica.</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"ren-tl-text"} -->
-					<p class="ren-tl-text">Ingresso come responsabile dell'area grafica. [Da completare]</p>
+					<p class="ren-tl-text">Il ruolo cresce progressivamente insieme all'organizzazione dell'agenzia: oltre alla progettazione grafica, mi occupo del coordinamento del lavoro, seguendo alcuni collaboratori interni ed esterni e supervisionando le diverse fasi dei progetti, dalla progettazione alla produzione dei materiali.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">Successivamente divento socio dell'ufficio e oggi ricopro il ruolo di Creative Director &amp; Partner.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">Continuo a occuparmi principalmente di grafica e visual communication, seguendo i progetti dal punto di vista creativo e coordinandone lo sviluppo fino alla realizzazione. È un lavoro che richiede di tenere insieme progettazione, esigenze del cliente, identità visiva e aspetti produttivi.</p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -131,13 +124,19 @@
 					<p class="ren-tl-date">2007 — 2013</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"ren-tl-org"} -->
-					<h3 class="wp-block-heading ren-tl-org">Freelance</h3>
+					<h3 class="wp-block-heading ren-tl-org">Rovereto</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"ren-tl-role"} -->
-					<p class="ren-tl-role">Rovereto</p>
+					<p class="ren-tl-role">Freelance graphic designer</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"ren-tl-text"} -->
-					<p class="ren-tl-text">Nel 2007 mi trasferisco a Rovereto e lavoro come libero professionista. [Da completare]</p>
+					<p class="ren-tl-text">Nel 2007 mi trasferisco a Rovereto e apro una posizione come freelance.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">È una fase nella quale continuo a lavorare con alcuni dei clienti con cui avevo già collaborato negli anni precedenti, ma anche a confrontarmi con nuove realtà e nuovi progetti.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">Il lavoro freelance mi permette di seguire direttamente le diverse fasi del progetto e di continuare a sviluppare competenze che avevo maturato negli anni precedenti, mantenendo un rapporto molto diretto con clienti, fornitori e produzione.</p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -147,13 +146,19 @@
 					<p class="ren-tl-date">2003 — 2007</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"ren-tl-org"} -->
-					<h3 class="wp-block-heading ren-tl-org">Officine Grafiche Staged</h3>
+					<h3 class="wp-block-heading ren-tl-org">Officine Grafiche Staged — IGB Group</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"ren-tl-role"} -->
 					<p class="ren-tl-role">Graphic designer</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"ren-tl-text"} -->
-					<p class="ren-tl-text">[Da completare]</p>
+					<p class="ren-tl-text">È il periodo nel quale la progettazione grafica si affianca in modo significativo alla conoscenza della prestampa e dei processi di stampa.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">Lavoro per i clienti delle Officine Grafiche Staged e all'interno del reparto creativo di IGB Group, occupandomi di progetti diversi tra loro: libri, retail design, newsletter, pubblicità, logotipi, manuali tecnici, corporate literature, cataloghi e sistemi di identità.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">Il lavoro comprende anche il rapporto diretto con i clienti e la gestione del progetto fino alla sua realizzazione.</p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -166,10 +171,19 @@
 					<h3 class="wp-block-heading ren-tl-org">Art Studio</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"ren-tl-role"} -->
-					<p class="ren-tl-role">[Ruolo]</p>
+					<p class="ren-tl-role">Graphic designer, co-owner</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"ren-tl-text"} -->
-					<p class="ren-tl-text">[Da completare]</p>
+					<p class="ren-tl-text">Lavoro a contatto con clienti e agenzie pubblicitarie, partecipando a progetti per realtà e marchi di dimensioni diverse.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">Attraverso le collaborazioni con Ogilvy Italy lavoro su progetti per Bulgari, IBM e Kodak. In collaborazione con Dolci Advertising e BGS D'Arcy seguo inoltre materiali destinati alla grande distribuzione, in particolare per il gruppo Auchan.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">In questi anni mantengo un rapporto diretto con stampatori e fornitori, seguendo sia gli aspetti creativi sia quelli produttivi dei progetti.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">È anche il periodo nel quale inizio ad avvicinarmi al web design, sviluppando i primi siti Internet e interfacce grafiche e lavorando con Photoshop e Dreamweaver.</p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -179,13 +193,13 @@
 					<p class="ren-tl-date">1994 — 1996</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"ren-tl-org"} -->
-					<h3 class="wp-block-heading ren-tl-org">[Nome]</h3>
+					<h3 class="wp-block-heading ren-tl-org">Milano</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"ren-tl-role"} -->
-					<p class="ren-tl-role">[Ruolo]</p>
+					<p class="ren-tl-role">Freelance graphic designer</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"ren-tl-text"} -->
-					<p class="ren-tl-text">[Da completare]</p>
+					<p class="ren-tl-text">Collaboro con diverse agenzie e studi di design, lavorando su progetti che comprendono newsletter, infografica e primi lavori per il web, tra cui siti Intranet.</p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -195,13 +209,16 @@
 					<p class="ren-tl-date">1992 — 1994</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"ren-tl-org"} -->
-					<h3 class="wp-block-heading ren-tl-org">[Nome]</h3>
+					<h3 class="wp-block-heading ren-tl-org">Sensi Sogim</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"ren-tl-role"} -->
-					<p class="ren-tl-role">[Ruolo]</p>
+					<p class="ren-tl-role">Quality Office</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"ren-tl-text"} -->
-					<p class="ren-tl-text">[Da completare]</p>
+					<p class="ren-tl-text">Una parentesi diversa dal percorso strettamente grafico.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">Mi occupo della verifica e del miglioramento dell'applicazione degli standard di sicurezza, svolgendo anche un ruolo di collegamento tra la direzione e i dipendenti.</p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -211,13 +228,16 @@
 					<p class="ren-tl-date">1989 — 1990</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:heading {"level":3,"className":"ren-tl-org"} -->
-					<h3 class="wp-block-heading ren-tl-org">[Nome]</h3>
+					<h3 class="wp-block-heading ren-tl-org">Ferraroli Graphic Design Studio</h3>
 					<!-- /wp:heading -->
 					<!-- wp:paragraph {"className":"ren-tl-role"} -->
-					<p class="ren-tl-role">[Ruolo]</p>
+					<p class="ren-tl-role">Junior graphic designer</p>
 					<!-- /wp:paragraph -->
 					<!-- wp:paragraph {"className":"ren-tl-text"} -->
-					<p class="ren-tl-text">[Da completare]</p>
+					<p class="ren-tl-text">Il mio primo incarico nel settore della grafica.</p>
+					<!-- /wp:paragraph -->
+					<!-- wp:paragraph {"className":"ren-tl-text"} -->
+					<p class="ren-tl-text">Mi occupo della preparazione dei layout e degli esecutivi, iniziando a conoscere concretamente il lavoro di studio e le fasi che portano un progetto verso la produzione.</p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
