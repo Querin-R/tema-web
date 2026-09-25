@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.77.0
+Version: 2.78.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2234,7 +2234,7 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 
 .ren-about-stat-number {
 	margin: 0;
-	font-size: clamp(3.5rem, 8vw, 6rem);
+	font-size: clamp(3rem, 5.5vw, 4rem);
 	font-weight: 700;
 	line-height: 1;
 	letter-spacing: -0.02em;
@@ -2245,8 +2245,8 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 .ren-about-stat-label {
 	margin: 0.75rem 0 2rem;
 	max-width: 22ch;
-	font-size: var(--wp--preset--font-size--medium);
-	line-height: 1.4;
+	font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+	line-height: 1.2;
 	color: var(--wp--preset--color--foreground);
 }
 
@@ -2270,4 +2270,56 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 	.ren-about-feature > .ren-about-aside {
 		margin-top: 2.5rem !important;
 	}
+}
+
+
+/* ── Contatti (v2.78.0) ─────────────────────────────────────── */
+.ren-contact-intro {
+	margin: 0 0 1.5rem;
+	max-width: 60ch;
+	font-size: var(--wp--preset--font-size--large);
+	line-height: 1.5;
+}
+
+.ren-contact-main .ren-email {
+	display: inline-block;
+	font-size: clamp(1.75rem, 4.5vw, 3.25rem);
+	font-weight: 600;
+	line-height: 1.15;
+	letter-spacing: -0.01em;
+	color: var(--wp--preset--color--accent);
+	text-decoration: none;
+	border-bottom: 2px solid currentColor;
+	overflow-wrap: anywhere;
+	transition: color 0.2s ease;
+}
+
+.ren-contact-main .ren-email:hover {
+	color: var(--wp--preset--color--foreground);
+}
+
+/* Social con il nome accanto all'icona: [ren_social_links labels="1"]. */
+.ren-social-links--labels {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem 2.25rem;
+}
+
+.ren-social-links--labels a {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	width: auto !important;
+	height: auto !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: none !important;
+	font-size: var(--wp--preset--font-size--medium);
+	color: var(--wp--preset--color--foreground) !important;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.ren-social-links--labels a:hover {
+	color: var(--wp--preset--color--accent) !important;
 }
