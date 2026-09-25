@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.76.2
+Version: 2.77.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2206,4 +2206,68 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 .ren-wide-body > ol {
 	font-size: 1.1875rem;
 	line-height: 1.75;
+}
+
+
+/* ── Chi sono (v2.77.0) ─────────────────────────────────────── */
+.ren-about-heading {
+	margin: 0;
+	font-size: var(--wp--preset--font-size--large);
+	line-height: 1.2;
+}
+
+.ren-about-text p {
+	margin: 0 0 1em;
+	font-size: 1.1875rem;
+	line-height: 1.75;
+	max-width: 70ch;
+}
+
+.ren-about-text p:last-child {
+	margin-bottom: 0;
+}
+
+/* Sezione epigrafi: titolo e testo a sinistra, numero e foto a destra. */
+.ren-about-feature .ren-about-heading {
+	margin-bottom: 1.5rem;
+}
+
+.ren-about-stat-number {
+	margin: 0;
+	font-size: clamp(3.5rem, 8vw, 6rem);
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: -0.02em;
+	color: var(--wp--preset--color--accent);
+	white-space: nowrap;
+}
+
+.ren-about-stat-label {
+	margin: 0.75rem 0 2rem;
+	max-width: 22ch;
+	font-size: var(--wp--preset--font-size--medium);
+	line-height: 1.4;
+	color: var(--wp--preset--color--foreground);
+}
+
+.ren-about-photo {
+	margin: 0;
+}
+
+.ren-about-photo img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+
+@media (max-width: 781px) {
+	.ren-about-cols > .wp-block-column + .wp-block-column,
+	.ren-about-feature > .wp-block-column + .wp-block-column {
+		margin-top: 1.25rem;
+	}
+
+	.ren-about-feature > .ren-about-aside {
+		margin-top: 2.5rem !important;
+	}
 }
