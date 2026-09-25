@@ -73,6 +73,14 @@ function ren_archive_count_shortcode() {
 	$start = ( ( $paged - 1 ) * $per_page ) + 1;
 	$end   = min( $found, $paged * $per_page );
 
+	// Posts page with featured article: page 1 holds one extra post.
+	if ( function_exists( 'ren_blog_featured_range' ) ) {
+		$range = ren_blog_featured_range();
+		if ( $range ) {
+			list( $start, $end ) = $range;
+		}
+	}
+
 	$label = _n( 'articolo', 'articoli', $found, 'ren' );
 	$text  = ( $start === $end )
 		? sprintf( '%1$d di %2$d %3$s', $start, $found, $label )
