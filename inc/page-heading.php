@@ -170,6 +170,12 @@ function ren_shortcode_page_heading() {
 	}
 
 	$portrait = ren_page_hero_portrait_id( $post_id );
+	if ( ! $portrait ) {
+		// One wrapper: the parent group uses the "constrained" layout, which
+		// centres each child separately at the content width. Wrapping keeps
+		// kicker, title and lead on the same left edge at any window width.
+		$html = '<div class="ren-page-heading">' . $html . '</div>';
+	}
 	if ( $portrait ) {
 		$img  = wp_get_attachment_image( $portrait, 'large', false, array( 'class' => 'ren-hero-split__img', 'loading' => 'eager', 'fetchpriority' => 'high' ) );
 		$html = '<div class="ren-hero-split"><div class="ren-hero-split__text">' . $html . '</div><div class="ren-hero-split__media">' . $img . '</div></div>';
