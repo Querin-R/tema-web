@@ -171,6 +171,7 @@
 		{ "name": "sidebar-blog", "title": "Blog Sidebar", "area": "uncategorized" }
 	],
 	"customTemplates": [
-		{ "name": "page-portfolio", "title": "Portfolio Landing", "postTypes": [ "page" ] }
+		{ "name": "page-portfolio", "title": "Portfolio Landing", "postTypes": [ "page" ] },
+		{ "name": "page-wide", "title": "Pagina a tutta larghezza", "postTypes": [ "page" ] }
 	]
 }
