@@ -1317,7 +1317,7 @@ function ren_admin_code_editors() {
 		wp_json_encode( $js )
 	);
 	wp_add_inline_script( 'ren-admin-options', $script );
-	wp_add_inline_style( 'ren-admin-options', '.ren-tab-panel .CodeMirror{height:auto;min-height:220px;max-height:640px;border:1px solid #dcdcde;border-radius:4px;font-size:13px}.ren-tab-panel .CodeMirror-scroll{min-height:220px;max-height:640px}#ren-custom-css + .CodeMirror,#ren-custom-css + .CodeMirror .CodeMirror-scroll{min-height:480px}' );
+	wp_add_inline_style( 'ren-admin-options', '#ren-tab-code .form-table{table-layout:fixed;width:100%}#ren-tab-code .form-table th{width:200px}#ren-tab-code .form-table td{min-width:0;overflow-wrap:anywhere}#ren-tab-code .CodeMirror{width:100%;max-width:100%;box-sizing:border-box}@media (max-width:782px){#ren-tab-code .form-table{table-layout:auto}#ren-tab-code .form-table th{width:auto}}.ren-tab-panel .CodeMirror{height:auto;min-height:220px;max-height:640px;border:1px solid #dcdcde;border-radius:4px;font-size:13px}.ren-tab-panel .CodeMirror-scroll{min-height:220px;max-height:640px}#ren-custom-css + .CodeMirror,#ren-custom-css + .CodeMirror .CodeMirror-scroll{min-height:480px}' );
 }
 
 /**
