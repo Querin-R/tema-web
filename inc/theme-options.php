@@ -1035,9 +1035,10 @@ function ren_field_codemirror() {
 function ren_field_custom_css() {
 	$options = ren_get_options();
 	printf(
-		'<textarea name="%1$s[custom_css]" rows="8" style="width:100%%;font-family:monospace;">%2$s</textarea>',
+		'<textarea id="ren-custom-css" class="ren-code-field" name="%1$s[custom_css]" rows="20" style="width:100%%;font-family:monospace;">%2$s</textarea><p class="description">%3$s</p>',
 		esc_attr( REN_OPTIONS_KEY ),
-		esc_textarea( $options['custom_css'] )
+		esc_textarea( $options['custom_css'] ),
+		esc_html__( 'Stampato in <head> dopo gli stili del tema, quindi li sovrascrive. Solo CSS: niente tag <style> né HTML.', 'ren' )
 	);
 }
 
@@ -1045,7 +1046,7 @@ function ren_field_custom_css() {
 function ren_field_custom_js_head() {
 	$options = ren_get_options();
 	printf(
-		'<textarea name="%1$s[custom_js_head]" rows="6" style="width:100%%;font-family:monospace;">%2$s</textarea>
+		'<textarea id="ren-custom-js-head" class="ren-code-field" name="%1$s[custom_js_head]" rows="12" style="width:100%%;font-family:monospace;">%2$s</textarea>
 		<p class="description">%3$s</p>',
 		esc_attr( REN_OPTIONS_KEY ),
 		esc_textarea( $options['custom_js_head'] ),
@@ -1057,9 +1058,10 @@ function ren_field_custom_js_head() {
 function ren_field_custom_js_footer() {
 	$options = ren_get_options();
 	printf(
-		'<textarea name="%1$s[custom_js_footer]" rows="6" style="width:100%%;font-family:monospace;">%2$s</textarea>',
+		'<textarea id="ren-custom-js-footer" class="ren-code-field" name="%1$s[custom_js_footer]" rows="12" style="width:100%%;font-family:monospace;">%2$s</textarea><p class="description">%3$s</p>',
 		esc_attr( REN_OPTIONS_KEY ),
-		esc_textarea( $options['custom_js_footer'] )
+		esc_textarea( $options['custom_js_footer'] ),
+		esc_html__( 'Racchiuso in <script> e stampato prima di </body>, a pagina caricata. Scrivi solo il codice, senza i tag <script>.', 'ren' )
 	);
 }
 
@@ -1268,8 +1270,55 @@ function ren_admin_assets( $hook ) {
 		REN_VERSION,
 		true
 	);
+
+	ren_admin_code_editors();
 }
 add_action( 'admin_enqueue_scripts', 'ren_admin_assets' );
+
+/**
+ * WordPress's built-in code editor (CodeMirror, the same one used by
+ * Appearance → Theme File Editor) on the Custom CSS / JS fields: line
+ * numbers, syntax highlighting, bracket matching and lint warnings in the
+ * gutter. Returns quietly if the user turned syntax highlighting off in
+ * their profile — the fields stay plain textareas.
+ */
+function ren_admin_code_editors() {
+	$css = wp_enqueue_code_editor(
+		array(
+			'type'       => 'text/css',
+			'codemirror' => array( 'lineWrapping' => false, 'indentUnit' => 2, 'tabSize' => 2 ),
+		)
+	);
+	$js  = wp_enqueue_code_editor(
+		array(
+			'type'       => 'text/javascript',
+			'codemirror' => array( 'lineWrapping' => false, 'indentUnit' => 2, 'tabSize' => 2 ),
+		)
+	);
+	if ( false === $css && false === $js ) {
+		return;
+	}
+
+	$script = sprintf(
+		'jQuery( function ( $ ) {
+			if ( ! window.wp || ! wp.codeEditor ) { return; }
+			var settings = { css: %1$s, js: %2$s }, editors = [];
+			[ [ "ren-custom-css", "css" ], [ "ren-custom-js-head", "js" ], [ "ren-custom-js-footer", "js" ] ].forEach( function ( f ) {
+				if ( settings[ f[1] ] && document.getElementById( f[0] ) ) {
+					editors.push( wp.codeEditor.initialize( f[0], settings[ f[1] ] ).codemirror );
+				}
+			} );
+			function refresh() { editors.forEach( function ( cm ) { cm.refresh(); } ); }
+			$( ".ren-options-sidebar .ren-nav-item" ).on( "click", function () { setTimeout( refresh, 0 ); } );
+			setTimeout( refresh, 50 );
+			$( "form" ).on( "submit", function () { editors.forEach( function ( cm ) { cm.save(); } ); } );
+		} );',
+		wp_json_encode( $css ),
+		wp_json_encode( $js )
+	);
+	wp_add_inline_script( 'ren-admin-options', $script );
+	wp_add_inline_style( 'ren-admin-options', '.ren-tab-panel .CodeMirror{height:auto;min-height:220px;max-height:640px;border:1px solid #dcdcde;border-radius:4px;font-size:13px}.ren-tab-panel .CodeMirror-scroll{min-height:220px;max-height:640px}#ren-custom-css + .CodeMirror,#ren-custom-css + .CodeMirror .CodeMirror-scroll{min-height:480px}' );
+}
 
 /**
  * Resolve the effective accent color. Used to be preset-or-custom; now
