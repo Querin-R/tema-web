@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.76.1
+Version: 2.76.2
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -1499,16 +1499,16 @@ body.ren-hero .ren-page-title {
 	margin-bottom: 0;
 }
 
-/* The heading sits in a constrained-layout group, which gives any child
-   with a max-width automatic side margins (i.e. centers it). Pin it to the
-   left unless the page's title alignment is center. */
+/* Kicker, title and lead share one wrapper (.ren-page-heading or
+   .ren-hero-split__text), so the lead lines up with the title: pinned left,
+   or centred when the page's title alignment is center. */
 .ren-hero-lead {
-	margin-left: 0 !important;
-	margin-right: auto !important;
+	margin-left: 0;
+	margin-right: auto;
 }
 
 body.ren-post-align-center .ren-hero-lead {
-	margin-left: auto !important;
+	margin-left: auto;
 }
 
 .ren-hero-lead {
