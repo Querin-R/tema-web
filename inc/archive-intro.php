@@ -40,6 +40,6 @@ function ren_archive_intro_shortcode() {
 		return '';
 	}
 
-	return apply_filters( 'the_content', $page->post_content );
+	return '<div class="ren-archive-intro">' . apply_filters( 'the_content', $page->post_content ) . '</div>';
 }
 add_shortcode( 'ren_archive_intro', 'ren_archive_intro_shortcode' );
