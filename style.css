@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.76.0
+Version: 2.76.1
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2076,7 +2076,7 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 .ren-tools-lead {
 	margin: 0;
 	font-size: var(--wp--preset--font-size--medium);
-	color: var(--wp--preset--color--muted);
+	color: var(--wp--preset--color--foreground);
 }
 
 .ren-tools-grid {
@@ -2138,7 +2138,7 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 	max-width: 500px;
 	font-size: var(--wp--preset--font-size--small);
 	line-height: 1.7;
-	color: var(--wp--preset--color--muted);
+	color: var(--wp--preset--color--foreground);
 }
 
 @media (max-width: 760px) {
