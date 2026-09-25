@@ -1,25 +1,57 @@
 <?php
 /**
- * Title: Contatti (minimale)
+ * Title: Contatti
  * Slug: ren/contatti
  * Categories: ren-pages
- * Description: Pagina Contatti essenziale: breve testo, email e social. Nessun modulo.
+ * Keywords: contatti, email, social, scrivimi
+ * Description: Pagina Contatti: breve testo ed email in grande (dalle Theme Options → Footer), poi i social con il nome. Nessun modulo.
  */
 ?>
-<!-- wp:group {"className":"ren-contatti","layout":{"type":"constrained"},"style":{"spacing":{"blockGap":"1.5rem"}}} -->
-<div class="wp-block-group ren-contatti">
+<!-- wp:group {"tagName":"section","className":"ren-home-section ren-contact-main","layout":{"type":"constrained","contentSize":"1280px"}} -->
+<section class="wp-block-group ren-home-section ren-contact-main">
+	<!-- wp:columns {"style":{"spacing":{"blockGap":{"left":"3rem"}}}} -->
+	<div class="wp-block-columns">
+		<!-- wp:column {"width":"28%"} -->
+		<div class="wp-block-column" style="flex-basis:28%">
+			<!-- wp:paragraph {"className":"ren-section-label"} -->
+			<p class="ren-section-label">Scrivimi</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column {"width":"72%"} -->
+		<div class="wp-block-column" style="flex-basis:72%">
+			<!-- wp:paragraph {"className":"ren-contact-intro"} -->
+			<p class="ren-contact-intro">Un'osservazione su un articolo, una segnalazione, una domanda sul mestiere o semplicemente un saluto: il modo più diretto è l'email.</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:shortcode -->
+			[ren_email]
+			<!-- /wp:shortcode -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
 
-	<!-- wp:paragraph {"fontSize":"medium"} -->
-	<p class="has-medium-font-size">Per uno scambio di idee su un articolo, una segnalazione o semplicemente per un saluto, il modo più diretto è scrivermi.</p>
-	<!-- /wp:paragraph -->
-
-	<!-- wp:shortcode -->
-	[ren_email]
-	<!-- /wp:shortcode -->
-
-	<!-- wp:shortcode -->
-	[ren_social_links]
-	<!-- /wp:shortcode -->
-
-</div>
+<!-- wp:group {"tagName":"section","className":"ren-home-section ren-contact-social","layout":{"type":"constrained","contentSize":"1280px"}} -->
+<section class="wp-block-group ren-home-section ren-contact-social">
+	<!-- wp:columns {"style":{"spacing":{"blockGap":{"left":"3rem"}}}} -->
+	<div class="wp-block-columns">
+		<!-- wp:column {"width":"28%"} -->
+		<div class="wp-block-column" style="flex-basis:28%">
+			<!-- wp:paragraph {"className":"ren-section-label"} -->
+			<p class="ren-section-label">Altrove</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column {"width":"72%"} -->
+		<div class="wp-block-column" style="flex-basis:72%">
+			<!-- wp:shortcode -->
+			[ren_social_links labels="1"]
+			<!-- /wp:shortcode -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</section>
 <!-- /wp:group -->
