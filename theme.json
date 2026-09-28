@@ -20,14 +20,14 @@
 			"customDuotone": true,
 			"customGradient": true,
 			"palette": [
-				{ "slug": "background", "name": "White", "color": "#ffffff" },
-				{ "slug": "surface", "name": "Light Grey", "color": "#f5f5f5" },
-				{ "slug": "foreground", "name": "Ink Black", "color": "#0a0a0a" },
-				{ "slug": "muted", "name": "Muted Grey", "color": "#6b6b6b" },
-				{ "slug": "accent", "name": "Electric Violet", "color": "#b026ff" },
-				{ "slug": "accent-alt", "name": "Acid Green", "color": "#baff29" },
-				{ "slug": "accent-coral", "name": "Hot Coral", "color": "#ff5470" },
-				{ "slug": "border", "name": "Hairline", "color": "#e2e2e2" }
+				{ "slug": "background", "name": "Bianco", "color": "#ffffff" },
+				{ "slug": "surface", "name": "Grigio chiaro", "color": "#f5f5f5" },
+				{ "slug": "foreground", "name": "Nero", "color": "#0a0a0a" },
+				{ "slug": "muted", "name": "Grigio secondario", "color": "#6b6b6b" },
+				{ "slug": "accent", "name": "Accento", "color": "#b026ff" },
+				{ "slug": "accent-alt", "name": "Verde acido", "color": "#baff29" },
+				{ "slug": "accent-coral", "name": "Corallo", "color": "#ff5470" },
+				{ "slug": "border", "name": "Linee sottili", "color": "#e2e2e2" }
 			],
 			"gradients": [
 				{
