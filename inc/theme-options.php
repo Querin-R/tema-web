@@ -59,6 +59,13 @@ function ren_default_options() {
 		'color_body'       => '',
 		'color_link'       => '',
 		'color_link_hover' => '',
+		// Mode for link / menu colors: '' (derive), 'auto', 'accent', 'custom'.
+		'color_link_mode'       => '',
+		'color_link_hover_mode' => '',
+		'color_menu'            => '',
+		'color_menu_mode'       => 'auto',
+		'color_menu_hover'      => '',
+		'color_menu_hover_mode' => 'accent',
 		'color_post_hero'  => '',
 		'color_table_header_bg'   => '',
 		'color_table_header_text' => '',
@@ -237,6 +244,8 @@ function ren_register_settings() {
 	add_settings_field( 'ren_color_body', __( 'Body Text', 'ren' ), 'ren_field_color_body', 'ren-tab-colors', 'ren_colors_section' );
 	add_settings_field( 'ren_color_link', __( 'Links', 'ren' ), 'ren_field_color_link', 'ren-tab-colors', 'ren_colors_section' );
 	add_settings_field( 'ren_color_link_hover', __( 'Links (hover)', 'ren' ), 'ren_field_color_link_hover', 'ren-tab-colors', 'ren_colors_section' );
+	add_settings_field( 'ren_color_menu', __( 'Menu', 'ren' ), 'ren_field_color_menu', 'ren-tab-colors', 'ren_colors_section' );
+	add_settings_field( 'ren_color_menu_hover', __( 'Menu (hover)', 'ren' ), 'ren_field_color_menu_hover', 'ren-tab-colors', 'ren_colors_section' );
 	add_settings_field( 'ren_color_post_hero', __( 'Post Hero Background', 'ren' ), 'ren_field_color_post_hero', 'ren-tab-colors', 'ren_colors_section' );
 	add_settings_field( 'ren_color_table_header_bg', __( 'Table Header Background', 'ren' ), 'ren_field_color_table_header_bg', 'ren-tab-colors', 'ren_colors_section' );
 	add_settings_field( 'ren_color_table_header_text', __( 'Table Header Text', 'ren' ), 'ren_field_color_table_header_text', 'ren-tab-colors', 'ren_colors_section' );
@@ -328,8 +337,14 @@ function ren_sanitize_options( $input ) {
 	$clean['enable_codemirror']   = ! empty( $input['enable_codemirror'] ) ? '1' : '0';
 
 	// Element colors — blank stays blank (means "automatic").
-	foreach ( array( 'color_heading', 'color_body', 'color_link', 'color_link_hover', 'color_post_hero', 'color_more_articles_bg', 'color_table_header_bg', 'color_table_header_text', 'color_table_row_1', 'color_table_row_2' ) as $key ) {
+	foreach ( array( 'color_heading', 'color_body', 'color_link', 'color_link_hover', 'color_menu', 'color_menu_hover', 'color_post_hero', 'color_more_articles_bg', 'color_table_header_bg', 'color_table_header_text', 'color_table_row_1', 'color_table_row_2' ) as $key ) {
 		$clean[ $key ] = isset( $input[ $key ] ) && '' !== $input[ $key ] ? ( ren_sanitize_color( $input[ $key ] ) ?: '' ) : '';
+	}
+
+	// Link / menu color modes.
+	foreach ( array( 'color_link', 'color_link_hover', 'color_menu', 'color_menu_hover' ) as $key ) {
+		$mode                    = isset( $input[ $key . '_mode' ] ) ? (string) $input[ $key . '_mode' ] : '';
+		$clean[ $key . '_mode' ] = in_array( $mode, array( 'auto', 'accent', 'custom' ), true ) ? $mode : $defaults[ $key . '_mode' ];
 	}
 
 	// Typography.
@@ -498,26 +513,66 @@ function ren_field_color_body() {
 	);
 }
 
-/** Field: link color (blank = automatic — follows the accent color). */
-function ren_field_color_link() {
-	$options = ren_get_options();
-	printf(
-		'<span class="ren-clearable-color"><input type="text" class="ren-color-picker" data-allow-empty="true" name="%1$s[color_link]" value="%2$s" /> <button type="button" class="button ren-color-clear">%3$s</button></span>',
-		esc_attr( REN_OPTIONS_KEY ),
-		esc_attr( $options['color_link'] ),
-		esc_html__( 'Auto', 'ren' )
-	);
+/**
+ * Current mode of a link/menu color option. Older installs have no mode
+ * saved: a filled-in color then means "custom", an empty one "auto".
+ *
+ * @param array  $options Options.
+ * @param string $key     Color key, e.g. color_link.
+ * @return string auto|accent|custom
+ */
+function ren_color_mode( $options, $key ) {
+	$mode = isset( $options[ $key . '_mode' ] ) ? $options[ $key . '_mode' ] : '';
+	if ( in_array( $mode, array( 'auto', 'accent', 'custom' ), true ) ) {
+		return $mode;
+	}
+	return ! empty( $options[ $key ] ) ? 'custom' : 'auto';
 }
 
-/** Field: link hover color (blank = automatic). */
-function ren_field_color_link_hover() {
+/**
+ * Color field with a mode selector: Automatico / Accento / Personalizzato.
+ * The color picker is shown only for "Personalizzato".
+ *
+ * @param string $key        Option key.
+ * @param string $auto_label What "Automatico" means for this field.
+ */
+function ren_render_color_mode_field( $key, $auto_label ) {
 	$options = ren_get_options();
-	printf(
-		'<span class="ren-clearable-color"><input type="text" class="ren-color-picker" data-allow-empty="true" name="%1$s[color_link_hover]" value="%2$s" /> <button type="button" class="button ren-color-clear">%3$s</button></span>',
-		esc_attr( REN_OPTIONS_KEY ),
-		esc_attr( $options['color_link_hover'] ),
-		esc_html__( 'Auto', 'ren' )
-	);
+	$mode    = ren_color_mode( $options, $key );
+	$name    = REN_OPTIONS_KEY . '[' . $key . ']';
+	?>
+	<div class="ren-color-mode" data-key="<?php echo esc_attr( $key ); ?>">
+		<select name="<?php echo esc_attr( REN_OPTIONS_KEY . '[' . $key . '_mode]' ); ?>" class="ren-color-mode__select">
+			<option value="auto" <?php selected( $mode, 'auto' ); ?>><?php echo esc_html( sprintf( __( 'Automatico (%s)', 'ren' ), $auto_label ) ); ?></option>
+			<option value="accent" <?php selected( $mode, 'accent' ); ?>><?php esc_html_e( 'Accento', 'ren' ); ?></option>
+			<option value="custom" <?php selected( $mode, 'custom' ); ?>><?php esc_html_e( 'Personalizzato', 'ren' ); ?></option>
+		</select>
+		<span class="ren-color-mode__picker" <?php echo 'custom' === $mode ? '' : 'style="display:none"'; ?>>
+			<input type="text" class="ren-color-picker" data-allow-empty="true" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $options[ $key ] ); ?>" />
+		</span>
+	</div>
+	<?php
+}
+
+/** Field: link color. */
+function ren_field_color_link() {
+	ren_render_color_mode_field( 'color_link', __( 'accento', 'ren' ) );
+}
+
+/** Field: link hover color. */
+function ren_field_color_link_hover() {
+	ren_render_color_mode_field( 'color_link_hover', __( 'colore del testo', 'ren' ) );
+}
+
+/** Field: menu items color. */
+function ren_field_color_menu() {
+	ren_render_color_mode_field( 'color_menu', __( 'colore del testo', 'ren' ) );
+	echo '<p class="description">' . esc_html__( 'Voci dei menu di header e footer.', 'ren' ) . '</p>';
+}
+
+/** Field: menu items hover color. */
+function ren_field_color_menu_hover() {
+	ren_render_color_mode_field( 'color_menu_hover', __( 'nessun cambio', 'ren' ) );
 }
 
 /** Field: table header background (blank = automatic, follows Accent). */
@@ -1271,6 +1326,7 @@ function ren_admin_assets( $hook ) {
 		true
 	);
 
+	wp_add_inline_script( 'ren-admin-options', 'jQuery(function($){$(".ren-color-mode__select").on("change",function(){$(this).siblings(".ren-color-mode__picker").toggle("custom"===this.value);});});' );
 	ren_admin_code_editors();
 }
 add_action( 'admin_enqueue_scripts', 'ren_admin_assets' );
@@ -1359,6 +1415,25 @@ function ren_get_scheme_colors( $scheme ) {
 }
 
 /**
+ * Value of a link/menu color option according to its mode.
+ *
+ * @param array  $options Options.
+ * @param string $key     Color key.
+ * @param string $auto    Value used in "auto" mode.
+ * @return string CSS color value.
+ */
+function ren_resolve_color_mode( $options, $key, $auto ) {
+	switch ( ren_color_mode( $options, $key ) ) {
+		case 'accent':
+			return 'var(--wp--preset--color--accent)';
+		case 'custom':
+			return ! empty( $options[ $key ] ) ? $options[ $key ] : $auto;
+		default:
+			return $auto;
+	}
+}
+
+/**
  * Build the :root{...} CSS custom-property block (colors, fonts, sizes) as
  * a plain string — reused for both the front-end <style> tag and the block
  * editor iframe injection below.
@@ -1372,8 +1447,10 @@ function ren_get_dynamic_css() {
 
 	$heading_color    = $options['color_heading'] ? $options['color_heading'] : $scheme['foreground'];
 	$body_color       = $options['color_body'] ? $options['color_body'] : $scheme['foreground'];
-	$link_color       = $options['color_link'] ? $options['color_link'] : $accent;
-	$link_hover_color = $options['color_link_hover'] ? $options['color_link_hover'] : $scheme['foreground'];
+	$link_color       = ren_resolve_color_mode( $options, 'color_link', $accent );
+	$link_hover_color = ren_resolve_color_mode( $options, 'color_link_hover', $scheme['foreground'] );
+	$menu_color       = ren_resolve_color_mode( $options, 'color_menu', 'inherit' );
+	$menu_hover_color = ren_resolve_color_mode( $options, 'color_menu_hover', 'inherit' );
 	$post_hero_color  = $options['color_post_hero'] ? $options['color_post_hero'] : $accent;
 	$accent_hover      = $options['accent_hover'] ? $options['accent_hover'] : $scheme['foreground'];
 	$table_header_bg   = $options['color_table_header_bg'] ? $options['color_table_header_bg'] : $accent;
@@ -1401,6 +1478,8 @@ function ren_get_dynamic_css() {
 	$lines[] = '--wp--custom--color--body: ' . $body_color . ';';
 	$lines[] = '--wp--custom--color--link: ' . $link_color . ';';
 	$lines[] = '--wp--custom--color--link-hover: ' . $link_hover_color . ';';
+	$lines[] = '--ren-menu-color: ' . $menu_color . ';';
+	$lines[] = '--ren-menu-hover-color: ' . $menu_hover_color . ';';
 	$lines[] = '--wp--custom--color--post-hero: ' . $post_hero_color . ';';
 	$lines[] = '--ren-more-articles-bg: ' . ( $options['color_more_articles_bg'] ? $options['color_more_articles_bg'] : '#f0f0f0' ) . ';';
 	$lines[] = '--ren-blog-columns: ' . absint( $options['blog_columns'] ) . ';';
