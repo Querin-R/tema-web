@@ -46,16 +46,42 @@ function ren_shortcode_footer_tagline() {
 }
 add_shortcode( 'ren_footer_tagline', 'ren_shortcode_footer_tagline' );
 
-/** [ren_email] — mailto link, obfuscated with antispambot(). */
+/**
+ * [ren_email] — mailto link that never appears in the HTML.
+ *
+ * The address is split into user and domain, each reversed and base64
+ * encoded into data attributes; a small script (ren_email_script) puts it
+ * back together in the visitor's browser after the page loads. Harvesters
+ * that read the HTML without running JavaScript find nothing usable.
+ * Without JavaScript a short notice is shown instead.
+ */
 function ren_shortcode_email() {
 	$options = ren_get_options();
 	$email   = $options['footer_email'];
 	if ( ! $email || ! is_email( $email ) ) {
 		return '';
 	}
-	return sprintf( '<a class="ren-email" href="mailto:%1$s">%2$s</a>', antispambot( $email, 1 ), antispambot( $email ) );
+
+	list( $user, $domain ) = explode( '@', $email, 2 );
+	$GLOBALS['ren_email_used'] = true;
+
+	return sprintf(
+		'<a class="ren-email ren-email--protected" href="#" rel="nofollow" data-u="%1$s" data-d="%2$s"><span class="ren-email__fallback">%3$s</span></a>',
+		esc_attr( base64_encode( strrev( $user ) ) ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- intentional, anti-harvesting.
+		esc_attr( base64_encode( strrev( $domain ) ) ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		esc_html__( 'Indirizzo email protetto: abilita JavaScript per vederlo.', 'ren' )
+	);
 }
 add_shortcode( 'ren_email', 'ren_shortcode_email' );
+
+/** Rebuilds protected addresses; printed only on pages that use [ren_email]. */
+function ren_email_script() {
+	if ( empty( $GLOBALS['ren_email_used'] ) ) {
+		return;
+	}
+	echo "<script>(function(){function d(s){try{return atob(s).split('').reverse().join('');}catch(e){return '';}}document.querySelectorAll('.ren-email--protected[data-u]').forEach(function(a){var e=d(a.dataset.u)+'@'+d(a.dataset.d);if(e.length<3){return;}a.href='mailto:'+e;a.textContent=e;a.classList.remove('ren-email--protected');a.removeAttribute('data-u');a.removeAttribute('data-d');});})();</script>\n";
+}
+add_action( 'wp_footer', 'ren_email_script', 99 );
 
 /** [ren_footer_links] — extra links (Paissangroup, ecc.) as a vertical list. */
 function ren_shortcode_footer_links() {
