@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.78.0
+Version: 2.79.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2322,4 +2322,28 @@ body.ren-blog-has-featured.ren-blog-layout-grid .ren-blog-query .wp-block-post-t
 
 .ren-social-links--labels a:hover {
 	color: var(--wp--preset--color--accent) !important;
+}
+
+
+/* Email protetta: avviso visibile solo finché lo script non ricompone
+   l'indirizzo (cioè solo senza JavaScript). */
+.ren-email--protected .ren-email__fallback {
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 400;
+	letter-spacing: 0;
+}
+
+
+/* ── Menu: colore voci e hover dalle Theme Options → Colori ─────
+   --ren-menu-color / --ren-menu-hover-color arrivano dal pannello
+   ("inherit" = automatico). Il blocco Navigazione impone color: inherit
+   con un selettore a doppia classe: qui serve un selettore più forte. */
+body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation-item__content {
+	color: var(--ren-menu-color, inherit);
+	transition: color 0.2s ease;
+}
+
+body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation-item__content:hover,
+body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation-item__content:focus-visible {
+	color: var(--ren-menu-hover-color, inherit);
 }
