@@ -115,10 +115,37 @@ function ren_meta_date_shortcode() {
 
 	$icon = '<svg class="ren-meta-icon" style="color:var(--wp--preset--color--accent)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>';
 
+	$post_id = get_the_ID();
+	$html    = sprintf(
+		'<time datetime="%1$s">%2$s</time>',
+		esc_attr( get_the_date( 'c', $post_id ) ),
+		esc_html( get_the_date( '', $post_id ) )
+	);
+
+	/*
+	 * "Ultimo aggiornamento" only after a real update: the modification must
+	 * fall on a later calendar day than the publication. Saves on the same
+	 * day (typo fixes right after publishing) don't count, and neither does
+	 * a scheduled post whose modified date precedes its publish date.
+	 */
+	$published = get_post_datetime( $post_id, 'date' );
+	$modified  = get_post_datetime( $post_id, 'modified' );
+	if ( $published && $modified && $modified->format( 'Y-m-d' ) > $published->format( 'Y-m-d' ) ) {
+		$updated_icon = '<svg class="ren-meta-icon" style="color:var(--wp--preset--color--accent)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>';
+		$updated      = sprintf(
+			'<span class="ren-meta-sep" aria-hidden="true">·</span><span class="ren-meta-item ren-meta-updated">%1$s %2$s <time datetime="%3$s">%4$s</time></span>',
+			$updated_icon,
+			esc_html__( 'Aggiornato il', 'ren' ),
+			esc_attr( get_the_modified_date( 'c', $post_id ) ),
+			esc_html( get_the_modified_date( '', $post_id ) )
+		);
+	}
+
 	return sprintf(
-		'<span class="ren-meta-item">%1$s %2$s</span>',
+		'<span class="ren-meta-item">%1$s %2$s</span>%3$s',
 		$icon,
-		esc_html( get_the_date() )
+		$html,
+		isset( $updated ) ? $updated : ''
 	);
 }
 add_shortcode( 'ren_post_date', 'ren_meta_date_shortcode' );
