@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.79.0
+Version: 2.79.2
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2346,4 +2346,16 @@ body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation
 body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation-item__content:hover,
 body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation-item__content:focus-visible {
 	color: var(--ren-menu-hover-color, inherit);
+}
+
+
+/* "Aggiornato il …" accanto alla data dell'articolo (v2.79.2). Sta nello
+   stesso paragrafo della data, quindi il separatore riproduce a mano lo
+   spazio (gap 0.5rem) che la riga dei meta mette tra le altre voci. */
+.ren-meta-sep {
+	margin: 0 0.5rem;
+}
+
+.ren-meta-updated {
+	white-space: nowrap;
 }
