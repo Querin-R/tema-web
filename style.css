@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.79.2
+Version: 2.80.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2358,4 +2358,98 @@ body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation
 
 .ren-meta-updated {
 	white-space: nowrap;
+}
+
+
+/* ── Elenco link a due colonne negli articoli (v2.80.0) ──────────
+   Pattern "Elenco link (due colonne)", categoria Ren Studio: Articoli.
+   Riusa la griglia "Strumenti" della pagina Esperienza (.ren-tools-grid,
+   .ren-tool-item: bordi sottili, trattino colorato, una colonna sotto i
+   760px) e la adatta al testo di un articolo: niente numeri, screenshot
+   facoltativo, dominio del sito sotto il titolo, testo anche su più
+   paragrafi. Nella griglia a tre tracce dell'articolo (.ren-content-left)
+   occupa tutta la larghezza del contenuto, 1280px, invece della sola
+   colonna di lettura: stesso effetto di "Ampio", senza l'attributo align. */
+.ren-content-left .ren-link-grid {
+	grid-column: 1 / -1 !important;
+	width: 100% !important;
+}
+
+.ren-article-body .ren-link-grid {
+	margin-top: 2.5rem;
+	margin-bottom: 2.5rem;
+}
+
+.ren-link-grid .ren-tool-item {
+	font-size: 1rem;
+	line-height: 1.7;
+}
+
+/* Il ritmo verticale dell'articolo (margini ampi sopra h2/h3, 1.5em tra
+   i blocchi) dentro i riquadri va ridotto. */
+.ren-article-body .ren-link-grid .ren-tool-item > * {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.ren-article-body .ren-link-grid .ren-tool-item > * + * {
+	margin-top: 0.9em;
+}
+
+.ren-link-grid .ren-tool-title {
+	margin: 0;
+}
+
+.ren-link-grid .ren-tool-title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.ren-link-grid .ren-tool-title a:hover,
+.ren-link-grid .ren-tool-title a:focus-visible {
+	color: var(--wp--preset--color--accent);
+}
+
+/* Dominio del sito, subito sotto il titolo: "coolors.co ↗". */
+.ren-article-body .ren-link-grid .ren-link-domain {
+	margin-top: 0.35em;
+	margin-bottom: 1.1em;
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	letter-spacing: 0.02em;
+}
+
+.ren-link-domain a {
+	color: var(--wp--preset--color--accent);
+	text-decoration: none;
+}
+
+.ren-link-domain a:hover,
+.ren-link-domain a:focus-visible {
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+/* Screenshot facoltativo in cima al riquadro. Proporzione fissa, così i
+   riquadri affiancati restano allineati anche con immagini di formati
+   diversi. Se il blocco immagine viene eliminato, il riquadro parte dal
+   titolo. */
+.ren-article-body .ren-link-grid .ren-link-shot {
+	margin: 0 0 1.5rem;
+}
+
+.ren-link-shot img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	object-fit: cover;
+	object-position: top center;
+	border: 1px solid var(--wp--preset--color--border);
+	border-radius: 4px;
+}
+
+/* Un blocco immagine inserito dal pattern ma lasciato vuoto non deve
+   occupare spazio nella pagina pubblicata. */
+.ren-link-shot:not(:has(img[src])) {
+	display: none;
 }
