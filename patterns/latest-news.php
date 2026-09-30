@@ -14,7 +14,7 @@
 		<h2 class="wp-block-heading">Latest News</h2>
 		<!-- /wp:heading -->
 		<!-- wp:paragraph {"fontSize":"small"} -->
-		<p class="has-small-font-size"><a href="/blog/">View all articles →</a></p>
+		<p class="has-small-font-size"><a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/' ) ); ?>">View all articles →</a></p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
