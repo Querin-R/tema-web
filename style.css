@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.80.0
+Version: 2.80.1
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2451,5 +2451,32 @@ body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation
 /* Un blocco immagine inserito dal pattern ma lasciato vuoto non deve
    occupare spazio nella pagina pubblicata. */
 .ren-link-shot:not(:has(img[src])) {
+	display: none;
+}
+
+
+/* ── Elenco link: logo al posto dello screenshot (v2.80.1) ───────
+   Classe ren-link-logo sul blocco Immagine, in alternativa a
+   ren-link-shot. L'immagine mantiene le sue proporzioni: altezza fissa,
+   larghezza libera, nessun bordo né ritaglio. Tutti i loghi della
+   griglia hanno così la stessa altezza e i titoli restano allineati.
+   Formato consigliato: PNG con fondo trasparente, alto almeno 112px
+   (il doppio dell'altezza mostrata, per gli schermi ad alta densità). */
+.ren-article-body .ren-link-grid .ren-link-logo {
+	margin: 0 0 1.5rem;
+}
+
+.ren-link-logo img {
+	display: block;
+	width: auto !important;
+	max-width: 100%;
+	height: 56px !important;
+	object-fit: contain;
+	object-position: left center;
+	border: 0;
+	border-radius: 0 !important;
+}
+
+.ren-link-logo:not(:has(img[src])) {
 	display: none;
 }
