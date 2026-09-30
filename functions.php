@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REN_VERSION', '2.79.2' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
+define( 'REN_VERSION', '2.80.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
 define( 'REN_DIR', get_template_directory() );
 define( 'REN_URI', get_template_directory_uri() );
 
@@ -203,6 +203,10 @@ function ren_register_pattern_categories() {
 	register_block_pattern_category(
 		'ren-pages',
 		array( 'label' => __( 'Ren Studio: Pages', 'ren' ) )
+	);
+	register_block_pattern_category(
+		'ren-articles',
+		array( 'label' => __( 'Ren Studio: Articoli', 'ren' ) )
 	);
 }
 add_action( 'init', 'ren_register_pattern_categories' );
