@@ -121,6 +121,44 @@
 			$preview.html( '' );
 		} );
 
+		// Footer brand image media uploader — same pattern as the logo
+		// uploader above, own frame/vars so the two don't collide.
+		var footerBrandFrame;
+		var $footerBrandIdField = $( '#ren-footer-brand-image-id' );
+		var $footerBrandPreview = $( '#ren-footer-brand-image-preview' );
+
+		$( '#ren-footer-brand-image-upload' ).on( 'click', function ( e ) {
+			e.preventDefault();
+
+			if ( footerBrandFrame ) {
+				footerBrandFrame.open();
+				return;
+			}
+
+			footerBrandFrame = wp.media( {
+				title: 'Choose Image',
+				button: { text: 'Use this image' },
+				multiple: false,
+				library: { type: 'image' },
+			} );
+
+			footerBrandFrame.on( 'select', function () {
+				var attachment = footerBrandFrame.state().get( 'selection' ).first().toJSON();
+				$footerBrandIdField.val( attachment.id );
+				$footerBrandPreview.html(
+					'<img src="' + attachment.url + '" style="max-height:60px;width:auto;display:block;" />'
+				);
+			} );
+
+			footerBrandFrame.open();
+		} );
+
+		$( '#ren-footer-brand-image-remove' ).on( 'click', function ( e ) {
+			e.preventDefault();
+			$footerBrandIdField.val( '' );
+			$footerBrandPreview.html( '' );
+		} );
+
 		// Previous/Next placeholder image media uploader — same pattern as
 		// the logo uploader above, kept as its own separate frame/vars so
 		// the two don't fight over "frame" being open at the same time.
