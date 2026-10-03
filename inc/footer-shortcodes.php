@@ -98,6 +98,28 @@ function ren_shortcode_footer_links() {
 }
 add_shortcode( 'ren_footer_links', 'ren_shortcode_footer_links' );
 
+/** [ren_footer_brand_image] — optional logo/marchio image (e.g. Paissangroup), linked if a URL is set. */
+function ren_shortcode_footer_brand_image() {
+	$options  = ren_get_options();
+	$image_id = $options['footer_brand_image_id'];
+	if ( ! $image_id ) {
+		return '';
+	}
+
+	$img = wp_get_attachment_image( $image_id, 'medium', false, array( 'class' => 'ren-footer-brand-image', 'style' => 'max-height:32px;width:auto;' ) );
+	if ( ! $img ) {
+		return '';
+	}
+
+	if ( $options['footer_brand_url'] ) {
+		$ext = ren_is_external_url( $options['footer_brand_url'] ) ? ' target="_blank" rel="noopener"' : '';
+		return sprintf( '<a href="%1$s"%2$s>%3$s</a>', esc_url( $options['footer_brand_url'] ), $ext, $img );
+	}
+
+	return $img;
+}
+add_shortcode( 'ren_footer_brand_image', 'ren_shortcode_footer_brand_image' );
+
 /** [ren_legal_links] — Privacy (WP setting) · Cookie (Theme Options). */
 function ren_shortcode_legal_links() {
 	$options = ren_get_options();
