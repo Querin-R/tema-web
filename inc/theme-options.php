@@ -128,11 +128,13 @@ function ren_default_options() {
 		'social_github'    => '',
 
 		// Footer.
-		'footer_tagline'    => 'Grafica, esperienza e appunti sul mestiere.',
-		'footer_email'      => '',
-		'footer_links'      => '',
-		'footer_copyright'  => 'René Querin / Q-design',
-		'footer_cookie_url' => '',
+		'footer_tagline'         => 'Grafica, esperienza e appunti sul mestiere.',
+		'footer_email'           => '',
+		'footer_links'           => '',
+		'footer_brand_image_id'  => 0,
+		'footer_brand_url'       => '',
+		'footer_copyright'       => 'René Querin / Q-design',
+		'footer_cookie_url'      => '',
 	);
 }
 
@@ -290,6 +292,7 @@ function ren_register_settings() {
 	add_settings_field( 'ren_footer_tagline', __( 'Tagline', 'ren' ), 'ren_field_footer_tagline', 'ren-tab-footer', 'ren_footer_section' );
 	add_settings_field( 'ren_footer_email', __( 'Email', 'ren' ), 'ren_field_footer_email', 'ren-tab-footer', 'ren_footer_section' );
 	add_settings_field( 'ren_footer_links', __( 'Link aggiuntivi', 'ren' ), 'ren_field_footer_links', 'ren-tab-footer', 'ren_footer_section' );
+	add_settings_field( 'ren_footer_brand_image', __( 'Logo/marchio aggiuntivo', 'ren' ), 'ren_field_footer_brand_image', 'ren-tab-footer', 'ren_footer_section' );
 	add_settings_field( 'ren_footer_copyright', __( 'Copyright', 'ren' ), 'ren_field_footer_copyright', 'ren-tab-footer', 'ren_footer_section' );
 	add_settings_field( 'ren_footer_cookie_url', __( 'Cookie policy URL', 'ren' ), 'ren_field_footer_cookie_url', 'ren-tab-footer', 'ren_footer_section' );
 }
@@ -414,6 +417,8 @@ function ren_sanitize_options( $input ) {
 	$clean['footer_tagline']    = isset( $input['footer_tagline'] ) ? sanitize_text_field( $input['footer_tagline'] ) : $defaults['footer_tagline'];
 	$clean['footer_email']      = isset( $input['footer_email'] ) ? sanitize_email( $input['footer_email'] ) : '';
 	$clean['footer_links']      = isset( $input['footer_links'] ) ? ren_sanitize_footer_links( $input['footer_links'] ) : '';
+	$clean['footer_brand_image_id'] = isset( $input['footer_brand_image_id'] ) ? absint( $input['footer_brand_image_id'] ) : 0;
+	$clean['footer_brand_url']      = isset( $input['footer_brand_url'] ) ? esc_url_raw( $input['footer_brand_url'] ) : '';
 	$clean['footer_copyright']  = isset( $input['footer_copyright'] ) ? sanitize_text_field( $input['footer_copyright'] ) : $defaults['footer_copyright'];
 	$clean['footer_cookie_url'] = isset( $input['footer_cookie_url'] ) ? esc_url_raw( $input['footer_cookie_url'] ) : '';
 
@@ -912,6 +917,28 @@ function ren_field_logo() {
 	<button type="button" class="button" id="ren-logo-upload"><?php esc_html_e( 'Choose Logo', 'ren' ); ?></button>
 	<button type="button" class="button" id="ren-logo-remove"><?php esc_html_e( 'Remove', 'ren' ); ?></button>
 	<p class="description"><?php esc_html_e( 'This also sets the Site Logo used by the Site Logo block in the header.', 'ren' ); ?></p>
+	<?php
+}
+
+/** Field: footer brand image (Media Library uploader) + its link URL. */
+function ren_field_footer_brand_image() {
+	$options  = ren_get_options();
+	$image_id = $options['footer_brand_image_id'];
+	$image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'medium' ) : '';
+	?>
+	<div id="ren-footer-brand-image-preview" style="margin-bottom:10px;">
+		<?php if ( $image_url ) : ?>
+			<img src="<?php echo esc_url( $image_url ); ?>" style="max-height:60px;width:auto;display:block;" />
+		<?php endif; ?>
+	</div>
+	<input type="hidden" name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[footer_brand_image_id]" id="ren-footer-brand-image-id" value="<?php echo esc_attr( $image_id ); ?>" />
+	<button type="button" class="button" id="ren-footer-brand-image-upload"><?php esc_html_e( 'Choose Image', 'ren' ); ?></button>
+	<button type="button" class="button" id="ren-footer-brand-image-remove"><?php esc_html_e( 'Remove', 'ren' ); ?></button>
+	<p>
+		<label for="ren-footer-brand-url"><?php esc_html_e( 'Link (optional)', 'ren' ); ?></label><br/>
+		<input type="url" name="<?php echo esc_attr( REN_OPTIONS_KEY ); ?>[footer_brand_url]" id="ren-footer-brand-url" value="<?php echo esc_attr( $options['footer_brand_url'] ); ?>" placeholder="https://…" style="width:420px;" />
+	</p>
+	<p class="description"><?php esc_html_e( 'Mostrato nel footer accanto ai "Link aggiuntivi" (es. il logo di Paissangroup). Se vuoto non compare nulla. Il testo alternativo usa quello impostato per l\'immagine nella Libreria media.', 'ren' ); ?></p>
 	<?php
 }
 
