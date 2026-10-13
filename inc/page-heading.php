@@ -36,6 +36,18 @@ function ren_register_page_heading_meta() {
 			},
 		)
 	);
+	register_post_meta(
+		'page',
+		'ren_hero_portrait_fx',
+		array(
+			'type'          => 'boolean',
+			'single'        => true,
+			'show_in_rest'  => true,
+			'auth_callback' => function () {
+				return current_user_can( 'edit_pages' );
+			},
+		)
+	);
 	foreach ( array( 'ren_hero_kicker', 'ren_hero_title', 'ren_hero_lead' ) as $key ) {
 		register_post_meta(
 			'page',
@@ -94,6 +106,13 @@ function ren_render_page_heading_fields( $post ) {
 		<button type="button" class="button" id="ren-hero-portrait-upload"><?php esc_html_e( 'Scegli ritratto', 'ren' ); ?></button>
 		<button type="button" class="button-link" id="ren-hero-portrait-remove"><?php esc_html_e( 'Rimuovi', 'ren' ); ?></button>
 	</p>
+	<p>
+		<label>
+			<input type="checkbox" name="ren_hero_portrait_fx" value="1" <?php checked( (bool) get_post_meta( $post->ID, 'ren_hero_portrait_fx', true ) ); ?> />
+			<?php esc_html_e( 'Effetto «fuori registro» al passaggio del mouse', 'ren' ); ?>
+		</label><br />
+		<span class="description"><?php esc_html_e( 'Le lastre ciano, magenta e giallo saltano fuori registro e rientrano. Pensato per ritratti in bianco e nero.', 'ren' ); ?></span>
+	</p>
 	<script>
 	( function () {
 		var frame, field = document.getElementById( 'ren_hero_portrait' ), preview = document.getElementById( 'ren-hero-portrait-preview' );
@@ -141,6 +160,15 @@ function ren_save_page_heading_fields( $post_id ) {
 			delete_post_meta( $post_id, 'ren_hero_portrait' );
 		}
 	}
+	// The portrait field is always in the box, so its presence means the box
+	// was submitted: an unticked checkbox then really means "off".
+	if ( isset( $_POST['ren_hero_portrait'] ) ) {
+		if ( ! empty( $_POST['ren_hero_portrait_fx'] ) ) {
+			update_post_meta( $post_id, 'ren_hero_portrait_fx', 1 );
+		} else {
+			delete_post_meta( $post_id, 'ren_hero_portrait_fx' );
+		}
+	}
 	// phpcs:enable
 }
 
@@ -177,13 +205,52 @@ function ren_shortcode_page_heading() {
 		$html = '<div class="ren-page-heading">' . $html . '</div>';
 	}
 	if ( $portrait ) {
-		$img  = wp_get_attachment_image( $portrait, 'large', false, array( 'class' => 'ren-hero-split__img', 'loading' => 'eager', 'fetchpriority' => 'high' ) );
+		$img = wp_get_attachment_image( $portrait, 'large', false, array( 'class' => 'ren-hero-split__img', 'loading' => 'eager', 'fetchpriority' => 'high' ) );
+		if ( get_post_meta( $post_id, 'ren_hero_portrait_fx', true ) ) {
+			$img = ren_misregister_markup( $portrait, $img );
+		}
 		$html = '<div class="ren-hero-split"><div class="ren-hero-split__text">' . $html . '</div><div class="ren-hero-split__media">' . $img . '</div></div>';
 	}
 
 	return str_replace( array( "\r", "\n" ), '', $html );
 }
 add_shortcode( 'ren_page_heading', 'ren_shortcode_page_heading' );
+
+/**
+ * "Fuori registro" portrait: the image three times, turned into the cyan,
+ * magenta and yellow printing plates by SVG filters and stacked with
+ * mix-blend-mode: multiply. Aligned they rebuild the black-and-white photo
+ * exactly; on hover (CSS in style.css) they jump out of register and settle
+ * back, once per hover. The two extra copies use the same file and srcset,
+ * so the browser downloads nothing more, and are hidden from screen readers.
+ *
+ * @param int    $id  Attachment ID.
+ * @param string $img Markup of the visible image.
+ * @return string
+ */
+function ren_misregister_markup( $id, $img ) {
+	$plate = wp_get_attachment_image(
+		$id,
+		'large',
+		false,
+		array(
+			'class'       => 'ren-misreg__plate',
+			'alt'         => '',
+			'aria-hidden' => 'true',
+			'loading'     => 'eager',
+		)
+	);
+	$lum = '0.2126 0.7152 0.0722 0 0';
+	$one = '0 0 0 0 1';
+	$a   = '0 0 0 1 0';
+	$svg = '<svg class="ren-misreg__filters" width="0" height="0" aria-hidden="true" focusable="false">'
+		. '<filter id="ren-plate-c" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="' . "$lum $one $one $a" . '"/></filter>'
+		. '<filter id="ren-plate-m" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="' . "$one $lum $one $a" . '"/></filter>'
+		. '<filter id="ren-plate-y" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="' . "$one $one $lum $a" . '"/></filter>'
+		. '</svg>';
+
+	return '<span class="ren-misreg">' . $img . $plate . $plate . '</span>' . $svg;
+}
 
 /**
  * Portrait ID, only when the hero band is active on that page.
