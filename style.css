@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.81.0
+Version: 2.81.1
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2574,5 +2574,155 @@ body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation
 @media (prefers-reduced-motion: reduce) {
 	.ren-misreg > * {
 		animation: none !important;
+	}
+}
+
+
+/* ── Stampa (v2.81.1) ─────────────────────────────────────────
+   L'header è position: fixed, e in stampa un elemento fisso si ripete in
+   cima a ogni pagina, coprendo il testo. In stampa restano solo titolo,
+   meta e contenuto: niente header, footer, navigazione e "Altri articoli".
+   I browser di norma non stampano gli sfondi, quindi i testi bianchi su
+   fondo colorato (fascia hero, badge, intestazioni delle tabelle, fasce
+   colorate) vengono riportati al nero. */
+@media print {
+	@page {
+		margin: 18mm 16mm;
+	}
+
+	.ren-header,
+	header.wp-block-template-part,
+	footer.wp-block-template-part,
+	.ren-footer,
+	.ren-search-overlay,
+	.ren-search-toggle,
+	.ren-post-nav-wrap,
+	.ren-more-articles-band,
+	.ren-more-articles-section,
+	.ren-more-articles,
+	.ren-content-left > .wp-block-separator.ren-full-bleed,
+	.ren-view-toggle,
+	.ren-category-filter,
+	.ren-misreg__plate,
+	.ren-misreg__filters {
+		display: none !important;
+	}
+
+	html,
+	body {
+		background: #fff !important;
+		color: #000 !important;
+	}
+
+	body {
+		padding-top: 0 !important;
+	}
+
+	main.wp-block-group {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+	}
+
+	/* Una sola colonna a tutta pagina, al posto della colonna centrale 70%. */
+	.ren-content-left {
+		display: block !important;
+	}
+
+	/* Fascia hero: niente sfondo né velo, testo nero, altezza naturale. */
+	body.ren-hero .ren-post-header,
+	.ren-post-header {
+		position: static !important;
+		left: auto !important;
+		right: auto !important;
+		width: auto !important;
+		margin: 0 0 1.5rem !important;
+		min-height: 0 !important;
+		padding: 0 !important;
+		background: none !important;
+	}
+
+	body.ren-hero-image .ren-post-header::before {
+		display: none !important;
+	}
+
+	.ren-post-header__inner {
+		padding: 0 !important;
+	}
+
+	body.ren-hero .ren-post-header,
+	body.ren-hero .ren-post-header *,
+	.ren-article-meta,
+	.ren-article-meta * {
+		color: #000 !important;
+	}
+
+	.ren-misreg > img {
+		filter: none !important;
+	}
+
+	.ren-category-badge a {
+		background: none !important;
+		color: #000 !important;
+		border: 1px solid #000;
+	}
+
+	.ren-table th,
+	.ren-table thead th {
+		background: none !important;
+		color: #000 !important;
+		border-bottom: 2px solid #000 !important;
+	}
+
+	.is-style-ren-band {
+		border-image: none !important;
+		background: none !important;
+	}
+
+	.is-style-ren-band,
+	.is-style-ren-band * {
+		color: #000 !important;
+	}
+
+	/* Testo */
+	.ren-article-body {
+		font-size: 11pt;
+		line-height: 1.55;
+	}
+
+	.ren-article-body p,
+	.ren-article-body li {
+		orphans: 3;
+		widows: 3;
+	}
+
+	h1, h2, h3, h4 {
+		break-after: avoid;
+		page-break-after: avoid;
+	}
+
+	img,
+	figure,
+	table,
+	blockquote,
+	pre,
+	.ren-tool-item,
+	.ren-tl-item {
+		break-inside: avoid;
+		page-break-inside: avoid;
+	}
+
+	img {
+		max-height: 120mm;
+		width: auto;
+		max-width: 100% !important;
+	}
+
+	/* Indirizzo dei link esterni nel testo, scritto dopo il link. */
+	.ren-article-body p a[href^="http"]::after,
+	.ren-article-body li a[href^="http"]::after {
+		content: " (" attr(href) ")";
+		font-size: 0.85em;
+		word-break: break-all;
+		color: #444;
 	}
 }
