@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REN_VERSION', '2.81.1' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
+define( 'REN_VERSION', '2.82.0' ); // Keep in sync with the "Version:" header in style.css on every release — this drives cache-busting for every enqueued script/style.
 define( 'REN_DIR', get_template_directory() );
 define( 'REN_URI', get_template_directory_uri() );
 
@@ -229,6 +229,7 @@ require_once REN_DIR . '/inc/fonts.php';
 require_once REN_DIR . '/inc/custom-css-js.php';
 require_once REN_DIR . '/inc/social-shortcodes.php';
 require_once REN_DIR . '/inc/footer-shortcodes.php';
+require_once REN_DIR . '/inc/post-footer.php';
 require_once REN_DIR . '/inc/legacy-redirects.php';
 require_once REN_DIR . '/inc/navigation-menus.php';
 require_once REN_DIR . '/inc/archive-view.php';
