@@ -4,7 +4,7 @@ Theme URI: https://example.com/ren
 Author: René Querin
 Author URI: https://q-design.it
 Description: A minimalist, high-contrast block theme for graphic designers and photographers. Built for the Site Editor (FSE) with a dedicated Portfolio custom post type, a filterable project grid, and a clean 3-column blog archive.
-Version: 2.81.1
+Version: 2.82.0
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
@@ -2604,8 +2604,20 @@ body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation
 	.ren-view-toggle,
 	.ren-category-filter,
 	.ren-misreg__plate,
-	.ren-misreg__filters {
+	.ren-misreg__filters,
+	.ren-post-contact {
 		display: none !important;
+	}
+
+	/* Indirizzo dell'articolo in fondo al testo, solo su carta. */
+	.ren-print-url {
+		display: block !important;
+		margin-top: 2rem !important;
+		padding-top: 0.75rem;
+		border-top: 1px solid #000;
+		font-size: 9pt;
+		color: #000 !important;
+		word-break: break-all;
 	}
 
 	html,
@@ -2725,4 +2737,24 @@ body .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation
 		word-break: break-all;
 		color: #444;
 	}
+}
+
+
+/* ── Fine articolo: contatto al posto dei commenti (v2.82.0) ───── */
+.ren-post-contact {
+	margin-top: 3rem !important;
+	padding-top: 1.5rem;
+	border-top: 1px solid var(--wp--preset--color--border);
+	color: var(--wp--preset--color--muted);
+}
+
+.ren-post-contact .ren-email {
+	color: var(--wp--preset--color--accent);
+	text-decoration: none;
+	border-bottom: 1px solid currentColor;
+}
+
+/* L'indirizzo dell'articolo si vede solo in stampa (vedi @media print). */
+.ren-print-url {
+	display: none;
 }
